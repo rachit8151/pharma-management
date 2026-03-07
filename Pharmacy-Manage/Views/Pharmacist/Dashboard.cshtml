@@ -1,0 +1,59 @@
+﻿@{
+    Layout = "~/Views/Shared/_PharmacistLayout.cshtml";
+    Context.Response.Headers["Cache-Control"] = "no-cache, no-store, must-revalidate";
+    Context.Response.Headers["Pragma"] = "no-cache";
+    Context.Response.Headers["Expires"] = "0";
+}
+
+@model Pharmacy_Manage.Models.Pharmacist
+
+@{
+    var firstName = Model.User.FullName?.Split(' ')[0];
+}
+
+<h2>Pharmacist Dashboard</h2>
+
+<h5>Welcome @firstName</h5>
+
+<hr />
+
+<h4>Pharmacy Information</h4>
+
+<table class="table table-bordered">
+
+    <tr>
+        <th>Pharmacist Name</th>
+        <td>@Model.User.FullName</td>
+    </tr>
+
+    <tr>
+        <th>Email</th>
+        <td>@Model.User.Email</td>
+    </tr>
+
+    <tr>
+        <th>Store Name</th>
+        <td>@Model.StoreName</td>
+    </tr>
+
+    <tr>
+        <th>Store Address</th>
+        <td>@Model.StoreAddress</td>
+    </tr>
+
+    <tr>
+        <th>License Number</th>
+        <td>@Model.LicenseNumber</td>
+    </tr>
+
+    <tr>
+        <th>License Expiry</th>
+        <td>@Model.LicenseExpiryDate</td>
+    </tr>
+
+    <tr>
+        <th>Status</th>
+        <td>@Model.VerificationStatus</td>
+    </tr>
+
+</table>

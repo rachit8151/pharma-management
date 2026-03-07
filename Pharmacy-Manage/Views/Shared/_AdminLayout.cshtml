@@ -1,0 +1,126 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+
+	<title>Admin Panel</title>
+
+	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+</head>
+
+<body>
+
+	<nav class="navbar navbar-dark bg-dark">
+		<div class="container-fluid">
+
+			<span class="navbar-brand">Pharmacy Admin Panel</span>
+
+			<a asp-controller="Account"
+				   asp-action="Logout"
+				   class="btn btn-light">
+				Logout
+			</a>
+
+		</div>
+	</nav>
+
+	<div class="container-fluid">
+
+		<div class="row">
+
+			<!-- SIDEBAR -->
+			<div class="col-2 bg-light vh-100 p-3">
+
+				<h5>Menu</h5>
+
+				<ul class="nav flex-column">
+
+					<li class="nav-item">
+						<a class="nav-link"
+							   asp-controller="Admin"
+							   asp-action="Dashboard">
+							Profile
+						</a>
+					</li>
+
+					<li class="nav-item">
+						<a class="nav-link"
+							   asp-controller="Admin"
+							   asp-action="PharmacistRequests">
+							Pharmacist Requests
+						</a>
+					</li>
+
+					<!-- MEDICINES MENU -->
+					<li class="nav-item">
+
+						<a class="nav-link"
+							   data-bs-toggle="collapse"
+							   href="#medicineMenu">
+
+							Medicines
+
+						</a>
+
+						<div class="collapse" id="medicineMenu">
+
+							<ul class="nav flex-column ms-3">
+
+								<li class="nav-item">
+									<a class="nav-link"
+										   asp-controller="Medicine"
+										   asp-action="Index">
+										View Medicines
+									</a>
+								</li>
+
+								<li class="nav-item">
+									<a class="nav-link"
+										   asp-controller="Medicine"
+										   asp-action="Create">
+										Add Medicine
+									</a>
+								</li>
+
+							</ul>
+
+						</div>
+
+					</li>
+
+					<li class="nav-item">
+						<a class="nav-link"
+							   asp-controller="Admin"
+							   asp-action="ManageStock">
+							Manage Stock
+						</a>
+					</li>
+
+					<li class="nav-item">
+						<a class="nav-link"
+							   asp-controller="Admin"
+							   asp-action="MedicineRequests">
+							Medicine Requests
+						</a>
+					</li>
+
+				</ul>
+
+			</div>
+
+			<!-- MAIN CONTENT -->
+			<div class="col-10 p-4">
+
+				@RenderBody()
+
+			</div>
+
+		</div>
+
+	</div>
+
+	<!-- Bootstrap JS -->
+	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

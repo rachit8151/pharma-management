@@ -1,0 +1,91 @@
+﻿@{
+    ViewData["Title"] = "Pharmacist Registration";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header text-center">
+                    <h4>Pharmacist Registration</h4>
+                </div>
+
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+
+                        <!-- USER INFORMATION -->
+                        <h5 class="mb-3">Account Information</h5>
+
+                        <div class="mb-3">
+                            <label>Full Name</label>
+                            <input type="text" class="form-control" name="FullName" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Email</label>
+                            <input type="email" class="form-control" name="Email" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Password</label>
+                            <input type="password" class="form-control" name="Password" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Confirm Password</label>
+                            <input type="password" class="form-control" name="ConfirmPassword" required />
+                        </div>
+
+                        <hr />
+
+                        <!-- STORE INFORMATION -->
+                        <h5 class="mb-3">Pharmacy Details</h5>
+
+                        <div class="mb-3">
+                            <label>Store Name</label>
+                            <input type="text" class="form-control" name="StoreName" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Store Address</label>
+                            <textarea class="form-control" name="StoreAddress" rows="3" required></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>License Number</label>
+                            <input type="text" class="form-control" name="LicenseNumber" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label>License Issue Date</label>
+                            <input type="date" class="form-control" name="LicenseIssueDate" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label>License Expiry Date</label>
+                            <input type="date" class="form-control" name="LicenseExpiryDate" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Upload License Certificate</label>
+                            <input type="file" class="form-control" name="LicenseDocument" accept=".jpg,.jpeg,.png,.pdf" required />
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success">
+                                Register
+                            </button>
+                        </div>
+
+                        <div class="text-center mt-3">
+                            <a asp-controller="Account" asp-action="Login">
+                                Already have account? Login
+                            </a>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

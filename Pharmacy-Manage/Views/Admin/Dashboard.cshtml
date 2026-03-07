@@ -1,0 +1,56 @@
+﻿@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    Context.Response.Headers["Cache-Control"] = "no-cache, no-store, must-revalidate";
+    Context.Response.Headers["Pragma"] = "no-cache";
+    Context.Response.Headers["Expires"] = "0";
+}
+
+@model Pharmacy_Manage.Models.User
+
+@{
+    var firstName = Model.FullName?.Split(' ')[0];
+}
+
+<h5>Welcome @firstName</h5>
+
+<hr />
+
+<h4>Admin Information</h4>
+
+<table class="table table-bordered">
+
+    <tr>
+        <th>Full Name</th>
+        <td>@Model.FullName</td>
+    </tr>
+
+    <tr>
+        <th>Email</th>
+        <td>
+            @Model.Email
+
+            <a asp-controller="Admin"
+                   asp-action="ChangeEmail"
+                   class="btn btn-sm btn-primary ms-2">
+                Change
+            </a>
+
+        </td>
+    </tr>
+
+    <tr>
+        <th>Role</th>
+        <td>@Model.Role</td>
+    </tr>
+
+    <tr>
+        <th>Status</th>
+        <td>@Model.Status</td>
+    </tr>
+
+    <tr>
+        <th>Created At</th>
+        <td>@Model.CreatedAt</td>
+    </tr>
+
+</table>

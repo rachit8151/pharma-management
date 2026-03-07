@@ -1,0 +1,24 @@
+﻿@{
+    Layout = "~/Views/Shared/_PharmacistLayout.cshtml";
+}
+
+@model List<Pharmacy_Manage.Models.PharmacistMedicine>
+
+<h2>My Medicine Stock</h2>
+
+<table class="table table-bordered">
+
+    <tr>
+        <th>Medicine</th>
+        <th>Quantity</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Medicine.MedicineName</td>
+            <td>@item.Quantity</td>
+        </tr>
+    }
+
+</table>

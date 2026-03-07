@@ -1,0 +1,66 @@
+﻿@{
+    Layout = "~/Views/Shared/_PharmacistLayout.cshtml";
+}
+
+@model List<Pharmacy_Manage.Models.Medicine>
+
+<h2>Available Medicines</h2>
+
+<table class="table table-bordered">
+
+    <tr>
+        <th>Medicine Name</th>
+        <th>Category</th>
+        <th>Manufacturer</th>
+        <th>Price</th>
+        <th>Action</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+
+            <td>@item.MedicineName</td>
+
+            <td>@item.Category</td>
+
+            <td>@item.Manufacturer</td>
+
+            <td>@item.UnitPrice</td>
+
+            <td>
+
+                <button class="btn btn-primary btn-sm"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#requestForm_@item.MedicineId">
+                    Request
+                </button>
+
+                <div class="collapse mt-2" id="requestForm_@item.MedicineId">
+
+                    <form asp-action="RequestMedicine" method="post">
+
+                        <input type="hidden"
+                               name="medicineId"
+                               value="@item.MedicineId" />
+
+                        <input type="number"
+                               name="quantity"
+                               class="form-control mb-1"
+                               placeholder="Enter quantity"
+                               required />
+
+                        <button class="btn btn-success btn-sm">
+                            Submit Request
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </td>
+
+        </tr>
+    }
+
+</table>

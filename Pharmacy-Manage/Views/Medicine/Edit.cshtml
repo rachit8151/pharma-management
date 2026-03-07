@@ -1,0 +1,35 @@
+﻿@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@model Pharmacy_Manage.Models.Medicine
+
+<h2>Edit Medicine</h2>
+
+<form method="post">
+
+    <input type="hidden" asp-for="MedicineId" />
+
+    <div class="mb-3">
+        <label>Medicine Name</label>
+        <input asp-for="MedicineName" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Category</label>
+        <input asp-for="Category" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Manufacturer</label>
+        <input asp-for="Manufacturer" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Price</label>
+        <input asp-for="UnitPrice" class="form-control" />
+    </div>
+
+    <button class="btn btn-success">Update</button>
+
+</form>

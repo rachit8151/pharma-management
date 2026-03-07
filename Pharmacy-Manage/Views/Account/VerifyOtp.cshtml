@@ -1,0 +1,17 @@
+﻿<h2>Verify OTP</h2>
+
+<form method="post">
+    <div>
+        <label>Enter OTP</label>
+    </div>
+    <div>
+        <input type="text" name="otp" required />
+    </div>
+    <br />
+    <button type="submit">Verify</button>
+</form>
+
+@if (ViewBag.Message != null)
+{
+    <p>@ViewBag.Message</p>
+}

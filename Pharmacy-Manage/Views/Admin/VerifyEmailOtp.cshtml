@@ -1,0 +1,23 @@
+﻿@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h3>Verify OTP</h3>
+
+<form method="post">
+
+    <div class="mb-3">
+        <label>Enter OTP</label>
+        <input type="text" name="otp" class="form-control" required />
+    </div>
+
+    <button class="btn btn-success">
+        Verify
+    </button>
+
+</form>
+
+@if (ViewBag.Message != null)
+{
+    <p>@ViewBag.Message</p>
+}

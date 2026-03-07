@@ -1,0 +1,51 @@
+﻿@{
+    Layout = "~/Views/Shared/_PharmacistLayout.cshtml";
+}
+
+@model List<Pharmacy_Manage.Models.MedicineRequest>
+
+<h2>My Medicine Requests</h2>
+
+<table class="table table-bordered">
+
+    <tr>
+        <th>Medicine</th>
+        <th>Quantity</th>
+        <th>Status</th>
+        <th>Request Date</th>
+        <th>Reason</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+
+            <td>@item.Medicine.MedicineName</td>
+
+            <td>@item.Quantity</td>
+
+            <td>
+
+                @if (item.Status == "pending")
+                {
+                    <span class="text-warning">Pending</span>
+                }
+                else if (item.Status == "approved")
+                {
+                    <span class="text-success">Approved</span>
+                }
+                else
+                {
+                    <span class="text-danger">Rejected</span>
+                }
+
+            </td>
+
+            <td>@item.RequestDate</td>
+
+            <td>@item.RejectReason</td>
+
+        </tr>
+    }
+
+</table>

@@ -1,0 +1,57 @@
+﻿@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@model List<Pharmacy_Manage.Models.Medicine>
+
+<h2>Medicines</h2>
+
+@if (!Model.Any())
+{
+    <p>No medicines added by admin.</p>
+}
+else
+{
+    <table class="table table-bordered">
+
+        <tr>
+            <th>Medicine Name</th>
+            <th>Category</th>
+            <th>Manufacturer</th>
+            <th>Price</th>
+            <th>Actions</th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+
+                <td>@item.MedicineName</td>
+
+                <td>@item.Category</td>
+
+                <td>@item.Manufacturer</td>
+
+                <td>@item.UnitPrice</td>
+
+                <td>
+
+                    <a asp-action="Edit"
+                           asp-route-id="@item.MedicineId"
+                           class="btn btn-sm btn-warning">
+                        Edit
+                    </a>
+
+                    <a asp-action="Delete"
+                           asp-route-id="@item.MedicineId"
+                           class="btn btn-sm btn-danger">
+                        Delete
+                    </a>
+
+                </td>
+
+            </tr>
+        }
+
+    </table>
+}

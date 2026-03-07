@@ -1,0 +1,73 @@
+﻿@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@model List<Pharmacy_Manage.Models.Medicine>
+
+<h2>Manage Medicine Stock</h2>
+
+<table class="table table-bordered">
+
+    <tr>
+        <th>Medicine</th>
+        <th>Category</th>
+        <th>Manufacturer</th>
+        <th>Price</th>
+        <th>Current Stock</th>
+        <th>Action</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+
+            <td>@item.MedicineName</td>
+
+            <td>@item.Category</td>
+
+            <td>@item.Manufacturer</td>
+
+            <td>@item.UnitPrice</td>
+
+            <td>@item.StockQuantity</td>
+
+            <td>
+
+                <button class="btn btn-primary btn-sm"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#stockForm_@item.MedicineId">
+
+                    Update Stock
+
+                </button>
+
+                <div class="collapse mt-2" id="stockForm_@item.MedicineId">
+
+                    <form asp-controller="Admin"
+                          asp-action="UpdateStock"
+                          method="post">
+
+                        <input type="hidden"
+                               name="MedicineId"
+                               value="@item.MedicineId" />
+
+                        <input type="number"
+                               name="StockQuantity"
+                               class="form-control mb-1"
+                               placeholder="Enter stock to add"
+                               required />
+
+                        <button class="btn btn-success btn-sm">
+                            Update
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </td>
+
+        </tr>
+    }
+
+</table>
