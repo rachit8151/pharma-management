@@ -41,6 +41,15 @@ namespace Pharmacy_Manage.Controllers
 			return View(pharmacists);
 		}
 
+		[HttpGet]
+		public JsonResult GetPendingPharmacistCount()
+		{
+			var count = _context.Pharmacists
+				.Count(p => p.VerificationStatus == "pending");
+
+			return Json(count);
+		}
+
 		// Approve Medicine Request
 		public IActionResult Approve(int id, DateTime expiryDate)
 		{
@@ -99,6 +108,32 @@ namespace Pharmacy_Manage.Controllers
 			return RedirectToAction("MedicineRequests");
 		}
 
+		//Approve pharmacist
+		[HttpPost]
+		public async Task<IActionResult> ApprovePharmacist(int id)
+		{
+			var pharmacist = _context.Pharmacists
+				.FirstOrDefault(p => p.PharmacistId == id);
+
+			if (pharmacist != null)
+			{
+				// Approve pharmacist
+				pharmacist.VerificationStatus = "approved";
+
+				// Activate user account
+				var user = _context.Users
+					.FirstOrDefault(u => u.UserId == pharmacist.UserId);
+
+				if (user != null)
+				{
+					user.Status = "active";
+				}
+
+				await _context.SaveChangesAsync();
+			}
+
+			return RedirectToAction("PharmacistRequests");
+		}
 		// Reject Pharmacist
 		[HttpPost]
 		public async Task<IActionResult> Reject(int id)
@@ -186,7 +221,16 @@ namespace Pharmacy_Manage.Controllers
 
 			return View(requests);
 		}
-		
+
+		[HttpGet]
+		public JsonResult GetPendingMedicineRequestCount()
+		{
+			var count = _context.MedicineRequests
+				.Count(r => r.Status == "pending");
+
+			return Json(count);
+		}
+
 
 		[HttpPost]
 		public IActionResult RejectRequest(int requestId, string reason)

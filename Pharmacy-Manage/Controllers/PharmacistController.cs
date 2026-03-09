@@ -97,5 +97,25 @@ namespace Pharmacy_Manage.Controllers
 
 			return View(stock);
 		}
+
+		public IActionResult Inventory()
+		{
+			var email = HttpContext.Session.GetString("UserEmail");
+
+			var pharmacist = _context.Pharmacists
+				.Include(p => p.User)
+				.FirstOrDefault(p => p.User.Email == email);
+
+			if (pharmacist == null)
+				return RedirectToAction("Login", "Account");
+
+			var inventory = _context.Inventories
+				.Include(i => i.Medicine)
+				.Where(i => i.PharmacistId == pharmacist.PharmacistId)
+				.OrderBy(i => i.ExpiryDate)
+				.ToList();
+
+			return View(inventory);
+		}
 	}
 }

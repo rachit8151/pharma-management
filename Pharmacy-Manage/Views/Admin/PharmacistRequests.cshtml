@@ -35,7 +35,7 @@
 
                     @if (item.VerificationStatus == "pending")
                     {
-                        <form asp-action="Approve" method="post">
+                        <form asp-action="ApprovePharmacist" method="post">
                             <input type="hidden" name="id" value="@item.PharmacistId" />
                             <button class="btn btn-success btn-sm">Approve</button>
                         </form>

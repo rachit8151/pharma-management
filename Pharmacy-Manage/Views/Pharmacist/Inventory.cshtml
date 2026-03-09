@@ -1,0 +1,58 @@
+﻿@model List<Pharmacy_Manage.Models.Inventory>
+
+@{
+    Layout = "~/Views/Shared/_PharmacistLayout.cshtml";
+}
+
+<h2>My Inventory</h2>
+
+<table class="table table-bordered">
+
+<tr>
+    <th>Medicine</th>
+    <th>Batch Number</th>
+    <th>Quantity</th>
+    <th>Expiry Date</th>
+    <th>Status</th>
+</tr>
+
+@foreach (var item in Model)
+{
+    string status = "OK";
+
+    if (item.ExpiryDate < DateTime.Now)
+    {
+        status = "Expired";
+    }
+    else if (item.ExpiryDate <= DateTime.Now.AddDays(30))
+    {
+        status = "Expiring Soon";
+    }
+
+<tr>
+    <td>@item.Medicine.MedicineName</td>
+    <td>@item.BatchNumber</td>
+    <td>@item.Quantity</td>
+    <td>@item.ExpiryDate.ToShortDateString()</td>
+
+    <td>
+
+        @if (status == "Expired")
+        {
+            <span class="badge bg-danger">Expired</span>
+        }
+        else if (status == "Expiring Soon")
+        {
+            <span class="badge bg-warning text-dark">Expiring Soon</span>
+        }
+        else
+        {
+            <span class="badge bg-success">OK</span>
+        }
+
+    </td>
+
+</tr>
+}
+
+</table>

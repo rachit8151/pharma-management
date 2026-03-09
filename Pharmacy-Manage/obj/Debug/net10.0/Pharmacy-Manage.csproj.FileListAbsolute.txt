@@ -9,7 +9,9 @@ D:\DotNetCore\Pharmacy-Manage\Pharmacy-Manage\bin\Debug\net10.0\Pharmacy-Manage.
 D:\DotNetCore\Pharmacy-Manage\Pharmacy-Manage\bin\Debug\net10.0\Pharmacy-Manage.pdb
 D:\DotNetCore\Pharmacy-Manage\Pharmacy-Manage\bin\Debug\net10.0\Azure.Core.dll
 D:\DotNetCore\Pharmacy-Manage\Pharmacy-Manage\bin\Debug\net10.0\Azure.Identity.dll
+D:\DotNetCore\Pharmacy-Manage\Pharmacy-Manage\bin\Debug\net10.0\BouncyCastle.Cryptography.dll
 D:\DotNetCore\Pharmacy-Manage\Pharmacy-Manage\bin\Debug\net10.0\Humanizer.dll
+D:\DotNetCore\Pharmacy-Manage\Pharmacy-Manage\bin\Debug\net10.0\MailKit.dll
 D:\DotNetCore\Pharmacy-Manage\Pharmacy-Manage\bin\Debug\net10.0\Microsoft.Bcl.AsyncInterfaces.dll
 D:\DotNetCore\Pharmacy-Manage\Pharmacy-Manage\bin\Debug\net10.0\Microsoft.Bcl.Cryptography.dll
 D:\DotNetCore\Pharmacy-Manage\Pharmacy-Manage\bin\Debug\net10.0\Microsoft.Build.Framework.dll
@@ -36,6 +38,7 @@ D:\DotNetCore\Pharmacy-Manage\Pharmacy-Manage\bin\Debug\net10.0\Microsoft.Identi
 D:\DotNetCore\Pharmacy-Manage\Pharmacy-Manage\bin\Debug\net10.0\Microsoft.IdentityModel.Tokens.dll
 D:\DotNetCore\Pharmacy-Manage\Pharmacy-Manage\bin\Debug\net10.0\Microsoft.SqlServer.Server.dll
 D:\DotNetCore\Pharmacy-Manage\Pharmacy-Manage\bin\Debug\net10.0\Microsoft.VisualStudio.SolutionPersistence.dll
+D:\DotNetCore\Pharmacy-Manage\Pharmacy-Manage\bin\Debug\net10.0\MimeKit.dll
 D:\DotNetCore\Pharmacy-Manage\Pharmacy-Manage\bin\Debug\net10.0\Mono.TextTemplating.dll
 D:\DotNetCore\Pharmacy-Manage\Pharmacy-Manage\bin\Debug\net10.0\Newtonsoft.Json.dll
 D:\DotNetCore\Pharmacy-Manage\Pharmacy-Manage\bin\Debug\net10.0\System.ClientModel.dll
@@ -224,6 +227,5 @@ D:\DotNetCore\Pharmacy-Manage\Pharmacy-Manage\obj\Debug\net10.0\refint\Pharmacy-
 D:\DotNetCore\Pharmacy-Manage\Pharmacy-Manage\obj\Debug\net10.0\Pharmacy-Manage.pdb
 D:\DotNetCore\Pharmacy-Manage\Pharmacy-Manage\obj\Debug\net10.0\Pharmacy-Manage.genruntimeconfig.cache
 D:\DotNetCore\Pharmacy-Manage\Pharmacy-Manage\obj\Debug\net10.0\ref\Pharmacy-Manage.dll
-D:\DotNetCore\Pharmacy-Manage\Pharmacy-Manage\bin\Debug\net10.0\BouncyCastle.Cryptography.dll
-D:\DotNetCore\Pharmacy-Manage\Pharmacy-Manage\bin\Debug\net10.0\MailKit.dll
-D:\DotNetCore\Pharmacy-Manage\Pharmacy-Manage\bin\Debug\net10.0\MimeKit.dll
+D:\DotNetCore\Pharmacy-Manage\Pharmacy-Manage\obj\Debug\net10.0\compressed\88d7w411eh-{0}-cgqnbs5ydq-cgqnbs5ydq.gz
+D:\DotNetCore\Pharmacy-Manage\Pharmacy-Manage\obj\Debug\net10.0\compressed\hlwwzfab8x-{0}-01vhk50d4z-01vhk50d4z.gz

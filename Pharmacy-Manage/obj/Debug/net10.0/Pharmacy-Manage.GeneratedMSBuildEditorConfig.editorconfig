@@ -98,6 +98,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGhhcm1hY2lzdFxEYXNoYm9hcmQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/DotNetCore/Pharmacy-Manage/Pharmacy-Manage/Views/Pharmacist/Inventory.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGhhcm1hY2lzdFxJbnZlbnRvcnkuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/DotNetCore/Pharmacy-Manage/Pharmacy-Manage/Views/Pharmacist/Medicines.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGhhcm1hY2lzdFxNZWRpY2luZXMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
