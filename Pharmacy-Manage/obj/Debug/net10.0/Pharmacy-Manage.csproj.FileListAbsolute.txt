@@ -152,7 +152,6 @@ D:\DotNetCore\Pharmacy-Manage\Pharmacy-Manage\obj\Debug\net10.0\scopedcss\Views\
 D:\DotNetCore\Pharmacy-Manage\Pharmacy-Manage\obj\Debug\net10.0\scopedcss\bundle\Pharmacy-Manage.styles.css
 D:\DotNetCore\Pharmacy-Manage\Pharmacy-Manage\obj\Debug\net10.0\scopedcss\projectbundle\Pharmacy-Manage.bundle.scp.css
 D:\DotNetCore\Pharmacy-Manage\Pharmacy-Manage\obj\Debug\net10.0\compressed\knhlucm3eb-{0}-b9sayid5wm-b9sayid5wm.gz
-D:\DotNetCore\Pharmacy-Manage\Pharmacy-Manage\obj\Debug\net10.0\compressed\bpaznqr42y-{0}-61n19gt1b8-61n19gt1b8.gz
 D:\DotNetCore\Pharmacy-Manage\Pharmacy-Manage\obj\Debug\net10.0\compressed\obzz5aocf6-{0}-xtxxf3hu2r-xtxxf3hu2r.gz
 D:\DotNetCore\Pharmacy-Manage\Pharmacy-Manage\obj\Debug\net10.0\compressed\x5qm46kjs8-{0}-bqjiyaj88i-bqjiyaj88i.gz
 D:\DotNetCore\Pharmacy-Manage\Pharmacy-Manage\obj\Debug\net10.0\compressed\6fl17ulybe-{0}-c2jlpeoesf-c2jlpeoesf.gz
@@ -229,3 +228,9 @@ D:\DotNetCore\Pharmacy-Manage\Pharmacy-Manage\obj\Debug\net10.0\Pharmacy-Manage.
 D:\DotNetCore\Pharmacy-Manage\Pharmacy-Manage\obj\Debug\net10.0\ref\Pharmacy-Manage.dll
 D:\DotNetCore\Pharmacy-Manage\Pharmacy-Manage\obj\Debug\net10.0\compressed\88d7w411eh-{0}-cgqnbs5ydq-cgqnbs5ydq.gz
 D:\DotNetCore\Pharmacy-Manage\Pharmacy-Manage\obj\Debug\net10.0\compressed\hlwwzfab8x-{0}-01vhk50d4z-01vhk50d4z.gz
+D:\DotNetCore\Pharmacy-Manage\Pharmacy-Manage\obj\Debug\net10.0\compressed\vpjuj21ux8-{0}-iktrih2o1m-iktrih2o1m.gz
+D:\DotNetCore\Pharmacy-Manage\Pharmacy-Manage\obj\Debug\net10.0\compressed\y2qbha3z71-{0}-1anwp7x7de-1anwp7x7de.gz
+D:\DotNetCore\Pharmacy-Manage\Pharmacy-Manage\obj\Debug\net10.0\compressed\6p758lhwz2-{0}-6sx6pifph3-6sx6pifph3.gz
+D:\DotNetCore\Pharmacy-Manage\Pharmacy-Manage\obj\Debug\net10.0\compressed\bpaznqr42y-{0}-k4po0nfbsl-k4po0nfbsl.gz
+D:\DotNetCore\Pharmacy-Manage\Pharmacy-Manage\obj\Debug\net10.0\compressed\dlebota7u0-{0}-c9anx67dge-c9anx67dge.gz
+D:\DotNetCore\Pharmacy-Manage\Pharmacy-Manage\obj\Debug\net10.0\compressed\t5oiawn5or-{0}-jnlz8dkvsa-jnlz8dkvsa.gz

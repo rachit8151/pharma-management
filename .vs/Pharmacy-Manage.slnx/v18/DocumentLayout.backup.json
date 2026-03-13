@@ -3,20 +3,8 @@
   "WorkspaceRootPath": "D:\\DotNetCore\\Pharmacy-Manage\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{0761A690-350A-6048-C30E-4CC342005D70}|Pharmacy-Manage\\Pharmacy-Manage.csproj|d:\\dotnetcore\\pharmacy-manage\\pharmacy-manage\\views\\shared\\_adminlayout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{0761A690-350A-6048-C30E-4CC342005D70}|Pharmacy-Manage\\Pharmacy-Manage.csproj|solutionrelative:pharmacy-manage\\views\\shared\\_adminlayout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0761A690-350A-6048-C30E-4CC342005D70}|Pharmacy-Manage\\Pharmacy-Manage.csproj|d:\\dotnetcore\\pharmacy-manage\\pharmacy-manage\\wwwroot\\js\\medicine-notifications.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
-      "RelativeMoniker": "D:0:0:{0761A690-350A-6048-C30E-4CC342005D70}|Pharmacy-Manage\\Pharmacy-Manage.csproj|solutionrelative:pharmacy-manage\\wwwroot\\js\\medicine-notifications.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0761A690-350A-6048-C30E-4CC342005D70}|Pharmacy-Manage\\Pharmacy-Manage.csproj|d:\\dotnetcore\\pharmacy-manage\\pharmacy-manage\\wwwroot\\js\\pharmacist-notifications.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
-      "RelativeMoniker": "D:0:0:{0761A690-350A-6048-C30E-4CC342005D70}|Pharmacy-Manage\\Pharmacy-Manage.csproj|solutionrelative:pharmacy-manage\\wwwroot\\js\\pharmacist-notifications.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0761A690-350A-6048-C30E-4CC342005D70}|Pharmacy-Manage\\Pharmacy-Manage.csproj|d:\\dotnetcore\\pharmacy-manage\\pharmacy-manage\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0761A690-350A-6048-C30E-4CC342005D70}|Pharmacy-Manage\\Pharmacy-Manage.csproj|solutionrelative:pharmacy-manage\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{0761A690-350A-6048-C30E-4CC342005D70}|Pharmacy-Manage\\Pharmacy-Manage.csproj|d:\\dotnetcore\\pharmacy-manage\\pharmacy-manage\\wwwroot\\js\\userrolechart.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{0761A690-350A-6048-C30E-4CC342005D70}|Pharmacy-Manage\\Pharmacy-Manage.csproj|solutionrelative:pharmacy-manage\\wwwroot\\js\\userrolechart.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
     }
   ],
   "DocumentGroupContainers": [
@@ -26,8 +14,21 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 0,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "userRoleChart.js",
+              "DocumentMoniker": "D:\\DotNetCore\\Pharmacy-Manage\\Pharmacy-Manage\\wwwroot\\js\\userRoleChart.js",
+              "RelativeDocumentMoniker": "Pharmacy-Manage\\wwwroot\\js\\userRoleChart.js",
+              "ToolTip": "D:\\DotNetCore\\Pharmacy-Manage\\Pharmacy-Manage\\wwwroot\\js\\userRoleChart.js",
+              "RelativeToolTip": "Pharmacy-Manage\\wwwroot\\js\\userRoleChart.js",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2026-03-13T19:46:04.823Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{c93a910a-0fa6-4307-93a4-f2bd61ec7828}"
@@ -35,58 +36,6 @@
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{0ad07096-bba9-4900-a651-0598d26f6d24}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "medicine-notifications.js",
-              "DocumentMoniker": "D:\\DotNetCore\\Pharmacy-Manage\\Pharmacy-Manage\\wwwroot\\js\\medicine-notifications.js",
-              "RelativeDocumentMoniker": "Pharmacy-Manage\\wwwroot\\js\\medicine-notifications.js",
-              "ToolTip": "D:\\DotNetCore\\Pharmacy-Manage\\Pharmacy-Manage\\wwwroot\\js\\medicine-notifications.js",
-              "RelativeToolTip": "Pharmacy-Manage\\wwwroot\\js\\medicine-notifications.js",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAbAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2026-03-09T18:19:19.554Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "pharmacist-notifications.js",
-              "DocumentMoniker": "D:\\DotNetCore\\Pharmacy-Manage\\Pharmacy-Manage\\wwwroot\\js\\pharmacist-notifications.js",
-              "RelativeDocumentMoniker": "Pharmacy-Manage\\wwwroot\\js\\pharmacist-notifications.js",
-              "ToolTip": "D:\\DotNetCore\\Pharmacy-Manage\\Pharmacy-Manage\\wwwroot\\js\\pharmacist-notifications.js",
-              "RelativeToolTip": "Pharmacy-Manage\\wwwroot\\js\\pharmacist-notifications.js",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAbAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2026-03-09T18:17:05.64Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "_AdminLayout.cshtml",
-              "DocumentMoniker": "D:\\DotNetCore\\Pharmacy-Manage\\Pharmacy-Manage\\Views\\Shared\\_AdminLayout.cshtml",
-              "RelativeDocumentMoniker": "Pharmacy-Manage\\Views\\Shared\\_AdminLayout.cshtml",
-              "ToolTip": "D:\\DotNetCore\\Pharmacy-Manage\\Pharmacy-Manage\\Views\\Shared\\_AdminLayout.cshtml",
-              "RelativeToolTip": "Pharmacy-Manage\\Views\\Shared\\_AdminLayout.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAGAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-03-09T18:15:59.054Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "AdminController.cs",
-              "DocumentMoniker": "D:\\DotNetCore\\Pharmacy-Manage\\Pharmacy-Manage\\Controllers\\AdminController.cs",
-              "RelativeDocumentMoniker": "Pharmacy-Manage\\Controllers\\AdminController.cs",
-              "ToolTip": "D:\\DotNetCore\\Pharmacy-Manage\\Pharmacy-Manage\\Controllers\\AdminController.cs",
-              "RelativeToolTip": "Pharmacy-Manage\\Controllers\\AdminController.cs",
-              "ViewState": "AgIAANMAAAAAAAAAAAAcwOcAAAADAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-09T18:15:26.712Z",
-              "EditorCaption": ""
             }
           ]
         }

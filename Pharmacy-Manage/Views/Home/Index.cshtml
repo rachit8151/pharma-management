@@ -2,7 +2,158 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container">
+
+    <!-- Hero Section -->
+    <div class="row align-items-center mb-5">
+        <div class="col-md-6">
+            <h1 class="display-4 fw-bold text-primary">MediPulse</h1>
+            <h4 class="text-muted">Medicine Demand Forecasting</h4>
+            <p class="mt-3">
+                MediPulse is a smart pharmacy management platform designed to
+                forecast medicine demand, track inventory, and help pharmacists
+                manage medicine supply efficiently. The system analyzes medicine
+                usage patterns to ensure pharmacies always maintain optimal stock levels.
+            </p>
+        </div>
+
+        <div class="col-md-6 text-center">
+            <canvas id="userRoleChart" height="100"></canvas>
+        </div>
+    </div>
+
+
+    <!-- System Agenda -->
+    <div class="row text-center mb-5">
+        <h2 class="mb-4">System Objectives</h2>
+
+        <div class="col-md-4">
+            <img src="~/images/forecast.png" width="80" class="mb-3" />
+            <h5>Demand Forecasting</h5>
+            <p>
+                Predict future medicine demand based on previous sales and
+                inventory patterns to avoid shortages.
+            </p>
+        </div>
+
+        <div class="col-md-4">
+            <img src="~/images/inventory.png" width="80" class="mb-3" />
+            <h5>Inventory Monitoring</h5>
+            <p>
+                Track medicine stock levels, batch numbers, expiry dates,
+                and reorder points in real time.
+            </p>
+        </div>
+
+        <div class="col-md-4">
+            <img src="~/images/alert.png" width="80" class="mb-3" />
+            <h5>Smart Alerts</h5>
+            <p>
+                Receive notifications for low stock and expiring medicines
+                to prevent financial loss and ensure availability.
+            </p>
+        </div>
+    </div>
+
+
+    <!-- Pharmacist Workflow -->
+    <div class="row mb-5">
+        <h2 class="text-center mb-4">Pharmacist Workflow</h2>
+
+        <div class="col-md-3 text-center">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5>Register</h5>
+                    <p>Pharmacist registers and submits pharmacy license for verification.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 text-center">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5>Inventory Access</h5>
+                    <p>View available medicines and request required stock.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 text-center">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5>Stock Monitoring</h5>
+                    <p>Track batches, expiry dates, and medicine availability.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 text-center">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5>Smart Reordering</h5>
+                    <p>System recommends medicines that need replenishment.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Forecasting Visualization -->
+    <div class="row mb-5">
+        <h2 class="text-center mb-4">Medicine Demand Analysis</h2>
+
+        <div class="col-md-6">
+            <p>
+                The system analyzes historical medicine demand data and predicts
+                future consumption patterns. This allows pharmacies to optimize
+                inventory levels and reduce overstocking or shortages.
+            </p>
+
+            <ul>
+                <li>Predict future medicine demand</li>
+                <li>Identify high-demand medicines</li>
+                <li>Improve supply chain planning</li>
+                <li>Reduce expired medicine waste</li>
+            </ul>
+        </div>
+
+        <div class="col-md-6 text-center">
+            <img src="~/images/forecast-graph.png" class="img-fluid rounded shadow" />
+        </div>
+    </div>
+
+
+    <!-- System Benefits -->
+    <div class="row text-center mb-5">
+        <h2 class="mb-4">Key Benefits</h2>
+
+        <div class="col-md-3">
+            <h5>Better Stock Planning</h5>
+            <p>Maintain optimal medicine availability.</p>
+        </div>
+
+        <div class="col-md-3">
+            <h5>Reduced Expiry Loss</h5>
+            <p>Track expiry dates and minimize waste.</p>
+        </div>
+
+        <div class="col-md-3">
+            <h5>Improved Efficiency</h5>
+            <p>Automate stock monitoring and alerts.</p>
+        </div>
+
+        <div class="col-md-3">
+            <h5>Data Driven Decisions</h5>
+            <p>Use analytics for better pharmacy management.</p>
+        </div>
+    </div>
+
+
+    <!-- Footer Section -->
+    <div class="text-center mt-5 mb-4">
+        <p class="text-muted">
+            PharmaPulse – Smart Medicine Demand Forecasting for Modern Pharmacies
+        </p>
+    </div>
+
 </div>

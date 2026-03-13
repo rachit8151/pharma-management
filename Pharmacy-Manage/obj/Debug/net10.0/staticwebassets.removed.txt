@@ -1,1 +1,0 @@
-D:\DotNetCore\Pharmacy-Manage\Pharmacy-Manage\wwwroot\js\admin-notifications.js
