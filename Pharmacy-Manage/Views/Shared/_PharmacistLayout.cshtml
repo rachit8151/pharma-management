@@ -91,6 +91,49 @@
                         </a>
                     </li>
 
+                    <li class="nav-item">
+
+                        <a class="nav-link" 
+                            data-bs-toggle="collapse" 
+                            href="#salesMenu" 
+                            role="button">
+                                Daily Sales
+                        </a>
+
+                        <div class="collapse" id="salesMenu">
+
+                            <ul class="nav flex-column ms-3">
+
+                                <li class="nav-item">
+                                    <a class="nav-link" 
+                                        asp-controller="Sales" 
+                                        asp-action="Index">
+                                            View Daily Sales
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link"
+                                        asp-controller="Sales"
+                                        asp-action="Create">
+                                            Add Daily Sales
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link"
+                                           asp-controller="Sales"
+                                           asp-action="Upload">
+                                        Bulk Upload Sales
+                                    </a>
+                                </li>
+
+                            </ul>
+
+                        </div>
+
+                    </li>
+
                 </ul>
 
             </div>
@@ -106,6 +149,7 @@
     </div>
 
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
 
 </body>
 </html>

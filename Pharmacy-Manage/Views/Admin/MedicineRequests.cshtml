@@ -4,6 +4,14 @@
         @TempData["Error"]
     </div>
 }
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Message"]
+    </div>
+}
+
 @{
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
@@ -12,7 +20,7 @@
 
 <h2>Medicine Requests</h2>
 
-<table class="table table-bordered">
+<table class="table table-bordered table-striped">
 
     <tr>
         <th>Pharmacist</th>
@@ -32,52 +40,98 @@
 
             <td>@item.Quantity</td>
 
-            <td>@item.Status</td>
-
             <td>
                 @if (item.Status == "pending")
                 {
+                    <span class="badge bg-warning text-dark">Pending</span>
+                }
+                else if (item.Status == "approved")
+                {
+                    <span class="badge bg-primary">Approved</span>
+                }
+                else if (item.Status == "delivered")
+                {
+                    <span class="badge bg-success">Delivered</span>
+                }
+                else
+                {
+                    <span class="badge bg-danger">Rejected</span>
+                }
+            </td>
+
+            <td>
+
+                @if (item.Status == "pending")
+                {
+                    <!-- Approve -->
                     <button class="btn btn-success btn-sm"
                             data-bs-toggle="collapse"
                             data-bs-target="#approveForm_@item.RequestId">
                         Approve
                     </button>
+
                     <div class="collapse mt-2" id="approveForm_@item.RequestId">
                         <form asp-action="Approve" method="post">
-                            <input type="hidden"
-                                   name="id"
-                                   value="@item.RequestId" />
-                            <input type="date"
-                                   name="expiryDate"
-                                   class="form-control mb-1"
-                                   required />
-                            <button class="btn btn-success btn-sm">
-                                Confirm Approve
-                            </button>
+                            <input type="hidden" name="id" value="@item.RequestId" />
+                            <input type="date" name="expiryDate" class="form-control mb-1" required />
+                            <button class="btn btn-success btn-sm">Confirm Approve</button>
                         </form>
                     </div>
+
+                    <!-- Reject -->
                     <button class="btn btn-danger btn-sm"
                             data-bs-toggle="collapse"
                             data-bs-target="#rejectForm_@item.RequestId">
                         Reject
                     </button>
+
                     <div class="collapse mt-2" id="rejectForm_@item.RequestId">
                         <form asp-action="RejectRequest" method="post">
-                            <input type="hidden"
-                                   name="requestId"
-                                   value="@item.RequestId" />
-                            <input type="text"
-                                   name="reason"
+                            <input type="hidden" name="requestId" value="@item.RequestId" />
+                            <input type="text" name="reason"
                                    class="form-control mb-1"
                                    placeholder="Enter rejection reason"
                                    required />
-                            <button class="btn btn-danger btn-sm">
-                                Confirm Reject
-                            </button>
+                            <button class="btn btn-danger btn-sm">Confirm Reject</button>
                         </form>
-
                     </div>
                 }
+                else if (item.Status == "approved")
+                {
+                    <!-- Send OTP -->
+                    <a asp-action="SendDeliveryOtp"
+                           asp-route-id="@item.RequestId"
+                           class="btn btn-warning btn-sm">
+                        Send OTP
+                    </a>
+
+                    <!-- Deliver -->
+                    <button class="btn btn-dark btn-sm"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#otpForm_@item.RequestId">
+                        Deliver
+                    </button>
+
+                    <div class="collapse mt-2" id="otpForm_@item.RequestId">
+                        <form asp-action="VerifyDelivery" method="post">
+                            <input type="hidden" name="id" value="@item.RequestId" />
+                            <input type="text" name="otp"
+                                   class="form-control mb-1"
+                                   placeholder="Enter OTP"
+                                   required />
+                            <button class="btn btn-dark btn-sm">Confirm Delivery</button>
+                        </form>
+                    </div>
+                }
+                else if (item.Status == "delivered")
+                {
+                    <span class="text-success fw-bold">Completed</span>
+                }
+                else
+                {
+                    <span class="text-danger">Rejected</span>
+                }
+
             </td>
 
         </tr>

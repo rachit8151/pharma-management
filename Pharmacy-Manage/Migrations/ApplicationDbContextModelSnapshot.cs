@@ -53,6 +53,8 @@ namespace Pharmacy_Manage.Migrations
 
                     b.HasIndex("MedicineId");
 
+                    b.HasIndex("PharmacistId");
+
                     b.ToTable("Inventories");
                 });
 
@@ -105,6 +107,15 @@ namespace Pharmacy_Manage.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RequestId"));
+
+                    b.Property<string>("DeliveryOtp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ExpiryDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDelivered")
+                        .HasColumnType("bit");
 
                     b.Property<int>("MedicineId")
                         .HasColumnType("int");
@@ -251,15 +262,58 @@ namespace Pharmacy_Manage.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("Sale", b =>
+                {
+                    b.Property<int>("SaleId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SaleId"));
+
+                    b.Property<int>("MedicineId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PharmacistId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("QuantitySold")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("SaleDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("TotalAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("UnitPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("SaleId");
+
+                    b.HasIndex("MedicineId");
+
+                    b.HasIndex("PharmacistId");
+
+                    b.ToTable("Sales");
+                });
+
             modelBuilder.Entity("Pharmacy_Manage.Models.Inventory", b =>
                 {
                     b.HasOne("Pharmacy_Manage.Models.Medicine", "Medicine")
                         .WithMany()
                         .HasForeignKey("MedicineId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Pharmacy_Manage.Models.Pharmacist", "Pharmacist")
+                        .WithMany()
+                        .HasForeignKey("PharmacistId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Medicine");
+
+                    b.Navigation("Pharmacist");
                 });
 
             modelBuilder.Entity("Pharmacy_Manage.Models.Medicine", b =>
@@ -304,6 +358,25 @@ namespace Pharmacy_Manage.Migrations
                 });
 
             modelBuilder.Entity("Pharmacy_Manage.Models.PharmacistMedicine", b =>
+                {
+                    b.HasOne("Pharmacy_Manage.Models.Medicine", "Medicine")
+                        .WithMany()
+                        .HasForeignKey("MedicineId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Pharmacy_Manage.Models.Pharmacist", "Pharmacist")
+                        .WithMany()
+                        .HasForeignKey("PharmacistId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Medicine");
+
+                    b.Navigation("Pharmacist");
+                });
+
+            modelBuilder.Entity("Sale", b =>
                 {
                     b.HasOne("Pharmacy_Manage.Models.Medicine", "Medicine")
                         .WithMany()

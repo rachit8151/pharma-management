@@ -1,18 +1,72 @@
 ﻿@{
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
-
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-info">
+        @TempData["Message"]
+    </div>
+}
 @model List<Pharmacy_Manage.Models.Medicine>
 
 <h2>Medicines</h2>
 
+<a asp-action="UploadCsv" class="btn btn-success mb-3">
+    Upload Medicines (CSV)
+</a>
+
+<form method="get" class="mb-3">
+
+    <div class="row">
+
+        <div class="col-md-4">
+
+            <input type="text"
+                   name="search"
+                   class="form-control"
+                   placeholder="Search medicine..."
+                   value="@Context.Request.Query["search"]" />
+
+        </div>
+
+        <div class="col-md-3">
+
+            <select name="category" class="form-control">
+
+                <option value="">All Categories</option>
+                <option value="Tablet">Tablet</option>
+                <option value="Capsule">Capsule</option>
+                <option value="Syrup">Syrup</option>
+                <option value="Injection">Injection</option>
+
+            </select>
+
+        </div>
+
+        <div class="col-md-3">
+
+            <button class="btn btn-primary">
+                Search
+            </button>
+
+            <a href="/Medicine/Index" class="btn btn-secondary">
+                Reset
+            </a>
+
+        </div>
+
+    </div>
+
+</form>
+
+
 @if (!Model.Any())
 {
-    <p>No medicines added by admin.</p>
+    <p>No medicines found.</p>
 }
 else
 {
-    <table class="table table-bordered">
+    <table class="table table-bordered table-striped">
 
         <tr>
             <th>Medicine Name</th>
@@ -27,11 +81,8 @@ else
             <tr>
 
                 <td>@item.MedicineName</td>
-
                 <td>@item.Category</td>
-
                 <td>@item.Manufacturer</td>
-
                 <td>@item.UnitPrice</td>
 
                 <td>

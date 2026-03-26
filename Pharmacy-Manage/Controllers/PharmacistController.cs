@@ -29,6 +29,26 @@ namespace Pharmacy_Manage.Controllers
 
 			return View(pharmacist);
 		}
+
+		public JsonResult GetSalesChartData(string date)
+		{
+			DateTime selectedDate = DateTime.Parse(date);
+
+			var data = _context.Medicines
+				.Select(m => new
+				{
+					name = m.MedicineName,
+					qty = _context.Sales
+						.Where(s => s.MedicineId == m.MedicineId &&
+									s.SaleDate.Date == selectedDate.Date)
+						.Sum(s => (int?)s.QuantitySold) ?? 0
+				})
+				.OrderByDescending(x => x.qty)
+				.ToList();
+
+			return Json(data);
+		}
+
 		public IActionResult Medicines()
 		{
 			var medicines = _context.Medicines.ToList();
@@ -114,7 +134,7 @@ namespace Pharmacy_Manage.Controllers
 			return View(stock);
 		}
 
-		public IActionResult Inventory()
+		public IActionResult Inventory(string search, string status)
 		{
 			var email = HttpContext.Session.GetString("UserEmail");
 
@@ -128,10 +148,47 @@ namespace Pharmacy_Manage.Controllers
 			var inventory = _context.Inventories
 				.Include(i => i.Medicine)
 				.Where(i => i.PharmacistId == pharmacist.PharmacistId)
-				.OrderBy(i => i.ExpiryDate)
 				.ToList();
 
-			var expiredItems = inventory.Where(i => i.ExpiryDate < DateTime.Now).ToList();
+			// SEARCH BY MEDICINE NAME
+			if (!string.IsNullOrEmpty(search))
+			{
+				inventory = inventory
+					.Where(i => i.Medicine.MedicineName
+					.ToLower()
+					.Contains(search.ToLower()))
+					.ToList();
+			}
+
+			// STATUS FILTER
+			if (!string.IsNullOrEmpty(status))
+			{
+				if (status == "expired")
+				{
+					inventory = inventory
+						.Where(i => i.ExpiryDate < DateTime.Now)
+						.ToList();
+				}
+				else if (status == "expiring")
+				{
+					inventory = inventory
+						.Where(i =>
+							i.ExpiryDate >= DateTime.Now &&
+							i.ExpiryDate <= DateTime.Now.AddDays(30))
+						.ToList();
+				}
+				else if (status == "lowstock")
+				{
+					inventory = inventory
+						.Where(i => i.Quantity < 20)
+						.ToList();
+				}
+			}
+
+			// REMOVE EXPIRED STOCK
+			var expiredItems = inventory
+				.Where(i => i.ExpiryDate < DateTime.Now)
+				.ToList();
 
 			foreach (var item in expiredItems)
 			{
@@ -156,6 +213,70 @@ namespace Pharmacy_Manage.Controllers
 				.ToList();
 
 			return View(inventory);
+		}
+
+		public IActionResult DownloadSalesPivotCSV()
+		{
+			var email = HttpContext.Session.GetString("UserEmail");
+
+			var pharmacist = _context.Pharmacists
+				.Include(p => p.User)
+				.FirstOrDefault(p => p.User.Email == email);
+
+			if (pharmacist == null)
+				return RedirectToAction("Login", "Account");
+
+			//STEP 1: Load medicines (ID → Name)
+			var medicines = _context.Medicines.ToList();
+
+			var medicineMap = medicines.ToDictionary(
+				m => m.MedicineId,
+				m => m.MedicineName
+			);
+
+			//STEP 2: Get sales data
+			var sales = _context.Sales
+				.Where(s => s.PharmacistId == pharmacist.PharmacistId)
+				.ToList();
+
+			//STEP 3: Group by Date
+			var grouped = sales
+				.GroupBy(s => s.SaleDate.Date)
+				.OrderBy(g => g.Key)
+				.ToList();
+
+			//STEP 4: Build CSV
+			var csv = new System.Text.StringBuilder();
+
+			// Header
+			csv.Append("Date");
+			foreach (var med in medicines)
+			{
+				csv.Append("," + med.MedicineName);
+			}
+			csv.AppendLine();
+
+			// Rows
+			foreach (var day in grouped)
+			{
+				csv.Append(day.Key.ToString("yyyy-MM-dd"));
+
+				foreach (var med in medicines)
+				{
+					var qty = day
+						.Where(x => x.MedicineId == med.MedicineId)
+						.Sum(x => (int?)x.QuantitySold) ?? 0;
+
+					csv.Append("," + qty);
+				}
+
+				csv.AppendLine();
+			}
+
+			//STEP 5: Return file
+			var bytes = System.Text.Encoding.UTF8.GetBytes(csv.ToString());
+
+			return File(bytes, "text/csv", "sales_ml_format.csv");
 		}
 	}
 }

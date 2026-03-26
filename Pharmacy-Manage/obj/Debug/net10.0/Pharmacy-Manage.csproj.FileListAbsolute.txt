@@ -234,3 +234,6 @@ D:\DotNetCore\Pharmacy-Manage\Pharmacy-Manage\obj\Debug\net10.0\compressed\6p758
 D:\DotNetCore\Pharmacy-Manage\Pharmacy-Manage\obj\Debug\net10.0\compressed\bpaznqr42y-{0}-k4po0nfbsl-k4po0nfbsl.gz
 D:\DotNetCore\Pharmacy-Manage\Pharmacy-Manage\obj\Debug\net10.0\compressed\dlebota7u0-{0}-c9anx67dge-c9anx67dge.gz
 D:\DotNetCore\Pharmacy-Manage\Pharmacy-Manage\obj\Debug\net10.0\compressed\t5oiawn5or-{0}-jnlz8dkvsa-jnlz8dkvsa.gz
+D:\DotNetCore\Pharmacy-Manage\Pharmacy-Manage\obj\Debug\net10.0\compressed\1u8zbd3ovd-{0}-dubn68q4pc-dubn68q4pc.gz
+D:\DotNetCore\Pharmacy-Manage\Pharmacy-Manage\obj\Debug\net10.0\compressed\1kbqqwqmv5-{0}-pn4rptlwgl-pn4rptlwgl.gz
+D:\DotNetCore\Pharmacy-Manage\Pharmacy-Manage\obj\Debug\net10.0\compressed\0ikbvxxlfc-{0}-s9kpdlaey5-s9kpdlaey5.gz

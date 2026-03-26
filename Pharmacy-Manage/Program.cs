@@ -11,6 +11,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddSingleton<EmailService>();
 builder.Services.AddSingleton<OtpService>();
 builder.Services.AddSingleton<PasswordHashService>();
+builder.Services.AddScoped<ExpiryAlertService>();
 
 //Connection String for SQL Server
 builder.Services.AddDbContext<ApplicationDbContext>(options =>

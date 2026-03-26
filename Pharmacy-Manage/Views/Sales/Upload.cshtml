@@ -1,0 +1,16 @@
+﻿@{
+    Layout = "~/Views/Shared/_PharmacistLayout.cshtml";
+}
+
+<h2>Upload Sales CSV</h2>
+
+<form asp-action="UploadPreview" method="post" enctype="multipart/form-data">
+
+    <div class="mb-3">
+        <label>Select CSV File</label>
+        <input type="file" name="file" accept=".csv" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-success">Upload</button>
+
+</form>

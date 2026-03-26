@@ -18,6 +18,8 @@ namespace Pharmacy_Manage.Models
 
 		public DateTime LastUpdated { get; set; }
 
+		public Pharmacist Pharmacist { get; set; }
+
 		public Medicine Medicine { get; set; }
 	}
 }

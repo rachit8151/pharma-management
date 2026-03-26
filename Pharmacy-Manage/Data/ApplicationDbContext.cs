@@ -16,6 +16,8 @@ namespace Pharmacy_Manage.Data
 		public DbSet<MedicineRequest> MedicineRequests { get; set; }
 		public DbSet<PharmacistMedicine> PharmacistMedicines { get; set; }
 		public DbSet<Inventory> Inventories { get; set; }
+		public DbSet<Sale> Sales { get; set; }
+
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			modelBuilder.Entity<MedicineRequest>()
@@ -41,6 +43,31 @@ namespace Pharmacy_Manage.Data
 				.WithMany()
 				.HasForeignKey(pm => pm.MedicineId)
 				.OnDelete(DeleteBehavior.Restrict);
+
+			modelBuilder.Entity<Inventory>()
+				.HasOne(i => i.Pharmacist)
+				.WithMany()
+				.HasForeignKey(i => i.PharmacistId)
+				.OnDelete(DeleteBehavior.NoAction);
+
+			modelBuilder.Entity<Inventory>()
+				.HasOne(i => i.Medicine)
+				.WithMany()
+				.HasForeignKey(i => i.MedicineId)
+				.OnDelete(DeleteBehavior.NoAction);
+
+			modelBuilder.Entity<Sale>()
+				.HasOne(s => s.Pharmacist)
+				.WithMany()
+				.HasForeignKey(s => s.PharmacistId)
+				.OnDelete(DeleteBehavior.Restrict);
+
+			modelBuilder.Entity<Sale>()
+				.HasOne(s => s.Medicine)
+				.WithMany()
+				.HasForeignKey(s => s.MedicineId)
+				.OnDelete(DeleteBehavior.Restrict);
+
 		}
 
 	}

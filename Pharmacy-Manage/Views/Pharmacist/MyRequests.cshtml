@@ -28,15 +28,19 @@
 
                 @if (item.Status == "pending")
                 {
-                    <span class="text-warning">Pending</span>
+                    <span class="badge bg-warning">Pending</span>
                 }
                 else if (item.Status == "approved")
                 {
-                    <span class="text-success">Approved</span>
+                    <span class="badge bg-primary">Approved</span>
+                }
+                else if (item.Status == "delivered")
+                {
+                    <span class="badge bg-success">Delivered</span>
                 }
                 else
                 {
-                    <span class="text-danger">Rejected</span>
+                    <span class="badge bg-danger">Rejected</span>
                 }
 
             </td>

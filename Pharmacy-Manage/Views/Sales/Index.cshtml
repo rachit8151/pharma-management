@@ -1,0 +1,47 @@
+﻿@model List<Sale>
+@{
+    Layout = "~/Views/Shared/_PharmacistLayout.cshtml";
+}
+
+<h2>Daily Sales</h2>
+
+<div class="mb-3">
+    <a asp-action="DownloadSalesPivotCSV"
+           asp-controller="Pharmacist"
+           class="btn btn-success">
+        Download CSV
+    </a>
+</div>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-info">
+        @TempData["Message"]
+    </div>
+}
+
+@if (!Model.Any())
+{
+    <p>No sales available</p>
+}
+else
+{
+    <table class="table table-bordered">
+        <tr>
+            <th>Date</th>
+            <th>Medicine</th>
+            <th>Qty</th>
+            <th>Total</th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.SaleDate.ToShortDateString()</td>
+                <td>@item.Medicine?.MedicineName</td>
+                <td>@item.QuantitySold</td>
+                <td>₹ @item.TotalAmount</td>
+            </tr>
+        }
+    </table>
+}

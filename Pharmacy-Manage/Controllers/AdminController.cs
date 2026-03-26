@@ -20,6 +20,9 @@ namespace Pharmacy_Manage.Controllers
 		// Admin Profile Dashboard
 		public IActionResult Dashboard()
 		{
+			var expiryService = HttpContext.RequestServices.GetService<ExpiryAlertService>();
+			expiryService.CheckExpiryAlerts();
+
 			var adminEmail = HttpContext.Session.GetString("UserEmail");
 			if (string.IsNullOrEmpty(adminEmail))
 			{
@@ -55,6 +58,8 @@ namespace Pharmacy_Manage.Controllers
 		{
 			var request = _context.MedicineRequests
 				.Include(r => r.Medicine)
+				.Include(r => r.Pharmacist)
+				.ThenInclude(p => p.User)
 				.FirstOrDefault(r => r.RequestId == id);
 
 			if (request == null)
@@ -64,46 +69,156 @@ namespace Pharmacy_Manage.Controllers
 
 			if (medicine.StockQuantity >= request.Quantity)
 			{
+				//reduce admin stock after approve
 				medicine.StockQuantity -= request.Quantity;
 
 				request.Status = "approved";
-				var stock = _context.PharmacistMedicines
-					.FirstOrDefault(x =>
-						x.PharmacistId == request.PharmacistId &&
-						x.MedicineId == request.MedicineId);
+				request.ExpiryDate = expiryDate;
 
-				if (stock != null)
-				{
-					stock.Quantity += request.Quantity;
-				}
-				else
-				{
-					var newStock = new PharmacistMedicine
-					{
-						PharmacistId = request.PharmacistId,
-						MedicineId = request.MedicineId,
-						Quantity = request.Quantity
-					};
+				var email = request.Pharmacist.User.Email;
+				var name = request.Pharmacist.User.FullName;
 
-					_context.PharmacistMedicines.Add(newStock);
-				}
-				var inventory = new Inventory
-				{
-					PharmacistId = request.PharmacistId,
-					MedicineId = request.MedicineId,
-					BatchNumber = "B" + DateTime.Now.Ticks.ToString().Substring(10),
-					Quantity = request.Quantity,
-					ExpiryDate = expiryDate,
-					LastUpdated = DateTime.Now
-				};
+				_emailService.SendOtp(
+					email,
+					"Medicine Request Approved",
+					$"Hello {name},\n\nYour request for {medicine.MedicineName} ({request.Quantity}) has been approved by admin.\n\nThank you."
+				);
 
-				_context.Inventories.Add(inventory);
+
+				//var stock = _context.PharmacistMedicines
+				//	.FirstOrDefault(x =>
+				//		x.PharmacistId == request.PharmacistId &&
+				//		x.MedicineId == request.MedicineId);
+
+				//if (stock != null)
+				//{
+				//	stock.Quantity += request.Quantity;
+				//}
+				//else
+				//{
+				//	var newStock = new PharmacistMedicine
+				//	{
+				//		PharmacistId = request.PharmacistId,
+				//		MedicineId = request.MedicineId,
+				//		Quantity = request.Quantity
+				//	};
+
+				//	_context.PharmacistMedicines.Add(newStock);
+				//}
+
+				//var inventory = new Inventory
+				//{
+				//	PharmacistId = request.PharmacistId,
+				//	MedicineId = request.MedicineId,
+				//	BatchNumber = "B" + DateTime.Now.Ticks.ToString().Substring(10),
+				//	Quantity = request.Quantity,
+				//	ExpiryDate = expiryDate,
+				//	LastUpdated = DateTime.Now
+				//};
+
+				//_context.Inventories.Add(inventory);
 				_context.SaveChanges();
 			}
 			else
 			{
 				TempData["Error"] = $"Stock low. Available stock: {medicine.StockQuantity}";
 			}
+
+			return RedirectToAction("MedicineRequests");
+		}
+
+		//SEND DELIVERY OTP
+		public IActionResult SendDeliveryOtp(int id)
+		{
+			var request = _context.MedicineRequests
+				.Include(r => r.Pharmacist)
+				.ThenInclude(p => p.User)
+				.FirstOrDefault(r => r.RequestId == id);
+
+			if (request == null)
+				return RedirectToAction("MedicineRequests");
+
+			string otp = new Random().Next(100000, 999999).ToString();
+
+			request.DeliveryOtp = otp;
+
+			var email = request.Pharmacist.User.Email;
+			var name = request.Pharmacist.User.FullName;
+
+			_emailService.SendOtp(
+				email,
+				"Delivery OTP",
+				$"Hello {name},\n\nYour delivery OTP is: {otp}\n\nProvide this OTP to admin."
+			);
+
+			_context.SaveChanges();
+
+			TempData["Message"] = "OTP Sent Successfully";
+
+			return RedirectToAction("MedicineRequests");
+		}
+
+		//delivery verification + stock + inventory
+		[HttpPost]
+		public IActionResult VerifyDelivery(int id, string otp, DateTime expiryDate)
+		{
+			var request = _context.MedicineRequests
+				.Include(r => r.Medicine)
+				.FirstOrDefault(r => r.RequestId == id);
+
+			if (request == null || request.DeliveryOtp != otp)
+			{
+				TempData["Error"] = "Invalid OTP";
+				return RedirectToAction("MedicineRequests");
+			}
+
+			//reduce Admin stock after delivered
+			//var medicine = request.Medicine;
+			//if (medicine.StockQuantity < request.Quantity)
+			//{
+			//	TempData["Error"] = "Stock not available!";
+			//	return RedirectToAction("MedicineRequests");
+			//}
+			//medicine.StockQuantity -= request.Quantity;
+
+			request.Status = "delivered";
+			request.IsDelivered = true;
+
+			//Add stock
+			var stock = _context.PharmacistMedicines
+				.FirstOrDefault(x =>
+					x.PharmacistId == request.PharmacistId &&
+					x.MedicineId == request.MedicineId);
+
+			if (stock != null)
+			{
+				stock.Quantity += request.Quantity;
+			}
+			else
+			{
+				var newStock = new PharmacistMedicine
+				{
+					PharmacistId = request.PharmacistId,
+					MedicineId = request.MedicineId,
+					Quantity = request.Quantity
+				};
+
+				_context.PharmacistMedicines.Add(newStock);
+			}
+
+			//Add inventory (expiry stored here)
+			_context.Inventories.Add(new Inventory
+			{
+				PharmacistId = request.PharmacistId,
+				MedicineId = request.MedicineId,
+				BatchNumber = "B" + DateTime.Now.Ticks.ToString().Substring(10),
+				Quantity = request.Quantity,
+				ExpiryDate = request.ExpiryDate.Value,
+				LastUpdated = DateTime.Now
+			});
+			_context.SaveChanges();
+
+			TempData["Message"] = "Delivered Successfully";
 
 			return RedirectToAction("MedicineRequests");
 		}
@@ -127,6 +242,11 @@ namespace Pharmacy_Manage.Controllers
 				if (user != null)
 				{
 					user.Status = "active";
+					_emailService.SendOtp(
+					   user.Email,
+					   "Pharmacist Account Approved",
+					   $"Hello {user.FullName},\n\nYour pharmacist account has been approved by admin.\nYou can now login to the Pharmacy System.\n\nThank You."
+				   );
 				}
 
 				await _context.SaveChangesAsync();
@@ -151,6 +271,11 @@ namespace Pharmacy_Manage.Controllers
 				if (user != null)
 				{
 					user.Status = "rejected";
+					_emailService.SendOtp(
+					   user.Email,
+					   "Pharmacist Account Approved",
+					   $"Hello {user.FullName},\n\nYour pharmacist account has been approved by admin.\nYou can now login to the Pharmacy System.\n\nThank You."
+				   );
 				}
 
 				await _context.SaveChangesAsync();
@@ -231,14 +356,27 @@ namespace Pharmacy_Manage.Controllers
 			return Json(count);
 		}
 
-
+		//medicine request reject
 		[HttpPost]
 		public IActionResult RejectRequest(int requestId, string reason)
 		{
-			var request = _context.MedicineRequests.Find(requestId);
+			var request = _context.MedicineRequests
+			   .Include(r => r.Medicine)
+			   .Include(r => r.Pharmacist)
+			   .ThenInclude(p => p.User)
+			   .FirstOrDefault(r => r.RequestId == requestId);
 
 			request.Status = "rejected";
 			request.RejectReason = reason;
+
+			var email = request.Pharmacist.User.Email;
+			var name = request.Pharmacist.User.FullName;
+
+			_emailService.SendOtp(
+				email,
+				"Medicine Request Rejected",
+				$"Hello {name},\n\nYour request for {request.Medicine.MedicineName} has been rejected.\nReason: {reason}\n\nPlease contact admin."
+			);
 
 			_context.SaveChanges();
 

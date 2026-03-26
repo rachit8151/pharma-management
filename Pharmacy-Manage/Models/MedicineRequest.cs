@@ -21,6 +21,11 @@ namespace Pharmacy_Manage.Models
 
 		public DateTime RequestDate { get; set; } = DateTime.Now;
 
+		public string? DeliveryOtp { get; set; }
+		public bool IsDelivered { get; set; } = false;
+
+		public DateTime? ExpiryDate { get; set; }
+
 		[ForeignKey("MedicineId")]
 		public Medicine Medicine { get; set; }
 

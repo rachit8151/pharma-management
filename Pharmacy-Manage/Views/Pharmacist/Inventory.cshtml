@@ -6,61 +6,104 @@
 
 <h2>My Inventory</h2>
 
-<table class="table table-bordered">
+<form method="get" class="mb-3">
 
-    <tr>
-        <th>Medicine</th>
-        <th>Batch Number</th>
-        <th>Quantity</th>
-        <th>Expiry Date</th>
-        <th>Status</th>
-    </tr>
+    <div class="row">
 
-    @foreach (var item in Model)
-    {
-        string status = "OK";
+        <div class="col-md-4">
+            <input type="text"
+                   name="search"
+                   id="searchBox"
+                   class="form-control"
+                   placeholder="Search medicine..." />
+        </div>
 
-        if (item.ExpiryDate < DateTime.Now)
-        {
-            status = "Expired";
-        }
-        else if (item.ExpiryDate <= DateTime.Now.AddDays(30))
-        {
-            status = "Expiring Soon";
-        }
-        else if (item.Quantity < 20)
-        {
-            status = "Low Stock";
-        }
+        <div class="col-md-3">
+            <select name="status"
+                    id="statusFilter"
+                    class="form-control">
 
+                <option value="">All Status</option>
+                <option value="expired">Expired</option>
+                <option value="expiring">Expiring Soon</option>
+                <option value="lowstock">Low Stock</option>
+
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <button class="btn btn-primary">Search</button>
+            <a href="/Pharmacist/Inventory" class="btn btn-secondary">Reset</a>
+        </div>
+
+    </div>
+
+</form>
+
+<table class="table table-bordered table-striped">
+
+    <thead>
         <tr>
-            <td>@item.Medicine.MedicineName</td>
-            <td>@item.BatchNumber</td>
-            <td>@item.Quantity</td>
-            <td>@item.ExpiryDate.ToShortDateString()</td>
-
-            <td>
-
-                @if (status == "Expired")
-                {
-                    <span class="badge bg-danger">Expired</span>
-                }
-                else if (status == "Expiring Soon")
-                {
-                    <span class="badge bg-warning text-dark">Expiry Soon</span>
-                }
-                else if (status == "Low Stock")
-                {
-                    <span class="badge bg-info text-dark">Low Stock</span>
-                }
-                else
-                {
-                    <span class="badge bg-success">OK</span>
-                }
-
-            </td>
-
+            <th>Medicine</th>
+            <th>Batch Number</th>
+            <th>Quantity</th>
+            <th>Expiry Date</th>
+            <th>Status</th>
         </tr>
-    }
+    </thead>
+
+    <tbody id="inventoryTable">
+
+        @foreach (var item in Model)
+        {
+            string status = "ok";
+
+            if (item.ExpiryDate < DateTime.Now)
+            {
+                status = "expired";
+            }
+            else if (item.ExpiryDate <= DateTime.Now.AddDays(30))
+            {
+                status = "expiring";
+            }
+            else if (item.Quantity < 20)
+            {
+                status = "lowstock";
+            }
+
+            <tr data-status="@status">
+
+                <td class="medicineName">@item.Medicine.MedicineName</td>
+                <td>@item.BatchNumber</td>
+                <td>@item.Quantity</td>
+                <td>@item.ExpiryDate.ToShortDateString()</td>
+
+                <td>
+
+                    @if (status == "expired")
+                    {
+                        <span class="badge bg-danger">Expired</span>
+                    }
+                    else if (status == "expiring")
+                    {
+                        <span class="badge bg-warning text-dark">Expiry Soon</span>
+                    }
+                    else if (status == "lowstock")
+                    {
+                        <span class="badge bg-info text-dark">Low Stock</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-success">OK</span>
+                    }
+
+                </td>
+
+            </tr>
+        }
+
+    </tbody>
 
 </table>
+
+<script src="~/js/inventory-search.js"></script>

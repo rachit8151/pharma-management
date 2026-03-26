@@ -1,0 +1,36 @@
+﻿@model List<SaleUploadPreview>
+
+@{
+    Layout = "~/Views/Shared/_PharmacistLayout.cshtml";
+}
+
+<h2>Preview</h2>
+
+<form method="post" asp-action="ConfirmUpload">
+
+    <table class="table">
+        <tr>
+            <th>Medicine</th>
+            <th>Qty</th>
+            <th>Status</th>
+            <th>Message</th>
+        </tr>
+
+        @for (int i = 0; i < Model.Count; i++)
+        {
+            <tr>
+                <td>@Model[i].MedicineName</td>
+                <td>@Model[i].Quantity</td>
+                <td>@Model[i].Status</td>
+                <td>@Model[i].Message</td>
+
+                <input type="hidden" name="[@i].MedicineId" value="@Model[i].MedicineId" />
+                <input type="hidden" name="[@i].Quantity" value="@Model[i].Quantity" />
+                <input type="hidden" name="[@i].Status" value="@Model[i].Status" />
+            </tr>
+        }
+    </table>
+
+    <button class="btn btn-primary">Confirm Upload</button>
+
+</form>

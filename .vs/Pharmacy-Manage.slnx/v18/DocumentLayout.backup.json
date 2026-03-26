@@ -3,8 +3,10 @@
   "WorkspaceRootPath": "D:\\DotNetCore\\Pharmacy-Manage\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{0761A690-350A-6048-C30E-4CC342005D70}|Pharmacy-Manage\\Pharmacy-Manage.csproj|d:\\dotnetcore\\pharmacy-manage\\pharmacy-manage\\wwwroot\\js\\userrolechart.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
-      "RelativeMoniker": "D:0:0:{0761A690-350A-6048-C30E-4CC342005D70}|Pharmacy-Manage\\Pharmacy-Manage.csproj|solutionrelative:pharmacy-manage\\wwwroot\\js\\userrolechart.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|ViewDataWindow_MSSQL__/_localdb__MSSQLLocalDB/PharmacyAI_DB/True/SqlTable/dbo.MedicineRequests.sql||{0058A1F7-65F3-4DB9-B3D0-CA7E64DD73CD}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|ViewDataWindow_MSSQL__/_localdb__MSSQLLocalDB/PharmacyAI_DB/True/SqlTable/dbo.Medicines.sql||{0058A1F7-65F3-4DB9-B3D0-CA7E64DD73CD}"
     }
   ],
   "DocumentGroupContainers": [
@@ -19,14 +21,21 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "userRoleChart.js",
-              "DocumentMoniker": "D:\\DotNetCore\\Pharmacy-Manage\\Pharmacy-Manage\\wwwroot\\js\\userRoleChart.js",
-              "RelativeDocumentMoniker": "Pharmacy-Manage\\wwwroot\\js\\userRoleChart.js",
-              "ToolTip": "D:\\DotNetCore\\Pharmacy-Manage\\Pharmacy-Manage\\wwwroot\\js\\userRoleChart.js",
-              "RelativeToolTip": "Pharmacy-Manage\\wwwroot\\js\\userRoleChart.js",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAmAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2026-03-13T19:46:04.823Z",
+              "Title": "dbo.MedicineRequests [Data]",
+              "DocumentMoniker": "ViewDataWindow_MSSQL__/_localdb__MSSQLLocalDB/PharmacyAI_DB/True/SqlTable/dbo.MedicineRequests.sql",
+              "ToolTip": "dbo.MedicineRequests [Data]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2026-03-26T16:33:03.608Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "dbo.Medicines [Data]",
+              "DocumentMoniker": "ViewDataWindow_MSSQL__/_localdb__MSSQLLocalDB/PharmacyAI_DB/True/SqlTable/dbo.Medicines.sql",
+              "ToolTip": "dbo.Medicines [Data]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2026-03-26T16:28:00.738Z",
               "EditorCaption": ""
             },
             {
