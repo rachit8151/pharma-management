@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using Pharmacy_Manage.Data;
 using Pharmacy_Manage.Models;
+using System.Text;
 
 namespace Pharmacy_Manage.Controllers
 {
@@ -14,7 +16,22 @@ namespace Pharmacy_Manage.Controllers
 			_context = context;
 		}
 
-		// Pharmacist Dashboard
+		// Pharmacist Profile Dashboard
+		public IActionResult Profile()
+		{
+			var email = HttpContext.Session.GetString("UserEmail");
+
+			if (string.IsNullOrEmpty(email))
+			{
+				return RedirectToAction("Login", "Account");
+			}
+
+			var pharmacist = _context.Pharmacists
+				.Include(p => p.User)
+				.FirstOrDefault(p => p.User.Email == email);
+
+			return View(pharmacist);
+		}
 		public IActionResult Dashboard()
 		{
 			var email = HttpContext.Session.GetString("UserEmail");
@@ -28,6 +45,11 @@ namespace Pharmacy_Manage.Controllers
 				.FirstOrDefault(p => p.User.Email == email);
 
 			return View(pharmacist);
+		}
+
+		public IActionResult SalesAnalytics()
+		{
+			return View();
 		}
 
 		public JsonResult GetSalesChartData(string date)
@@ -277,6 +299,112 @@ namespace Pharmacy_Manage.Controllers
 			var bytes = System.Text.Encoding.UTF8.GetBytes(csv.ToString());
 
 			return File(bytes, "text/csv", "sales_ml_format.csv");
+		}
+
+		[HttpGet]
+		public async Task<IActionResult> GetPredictionData()
+		{
+			using (HttpClient client = new HttpClient())
+			{
+				var requestData = new { days = 7 };
+
+				var json = JsonConvert.SerializeObject(requestData);
+
+				var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+				var response = await client.PostAsync("http://127.0.0.1:5000/predict", content);
+
+				var result = await response.Content.ReadAsStringAsync();
+
+				return Content(result, "application/json"); // ✅ correct
+			}
+		}
+
+		[HttpGet]
+		public async Task<IActionResult> GetStockSuggestions()
+		{
+			var email = HttpContext.Session.GetString("UserEmail");
+
+			var pharmacist = _context.Pharmacists
+				.Include(p => p.User)
+				.FirstOrDefault(p => p.User.Email == email);
+
+			if (pharmacist == null)
+				return RedirectToAction("Login", "Account");
+
+			// 🔥 CALL ML API
+			using (HttpClient client = new HttpClient())
+			{
+				var requestData = new { days = 7 };
+
+				var json = JsonConvert.SerializeObject(requestData);
+
+				var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+				var response = await client.PostAsync("http://127.0.0.1:5000/predict", content);
+
+				var result = await response.Content.ReadAsStringAsync();
+
+				dynamic prediction = JsonConvert.DeserializeObject(result);
+
+				var data = prediction.data;
+
+				// ======================
+				// CALCULATE TOTAL DEMAND (7 days)
+				// ======================
+				Dictionary<string, int> totalDemand = new Dictionary<string, int>();
+
+				foreach (var day in data)
+				{
+					foreach (var prop in day)
+					{
+						string key = prop.Name;
+
+						if (key == "date") continue;
+
+						int value = (int)prop.Value;
+
+						if (!totalDemand.ContainsKey(key))
+							totalDemand[key] = 0;
+
+						totalDemand[key] += value;
+					}
+				}
+
+				// ======================
+				// GET CURRENT STOCK
+				// ======================
+				var stockList = _context.PharmacistMedicines
+					.Include(x => x.Medicine)
+					.Where(x => x.PharmacistId == pharmacist.PharmacistId)
+					.ToList();
+
+				var suggestions = new List<StockSuggestion>();
+
+				foreach (var item in stockList)
+				{
+					string medName = item.Medicine.MedicineName;
+
+					int currentStock = item.Quantity;
+
+					int predicted = totalDemand.ContainsKey(medName)
+						? totalDemand[medName]
+						: 0;
+
+					int needToBuy = predicted - currentStock;
+
+					suggestions.Add(new StockSuggestion
+					{
+						Medicine = medName,
+						Stock = currentStock,
+						Predicted = predicted,
+						Order = needToBuy > 0 ? needToBuy : 0,
+						Status = needToBuy > 0 ? "LOW" : "OK"
+					});
+				}
+
+				return Json(suggestions.OrderByDescending(x => x.Status == "LOW"));
+			}
 		}
 	}
 }

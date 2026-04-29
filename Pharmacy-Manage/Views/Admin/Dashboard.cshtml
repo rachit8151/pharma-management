@@ -8,49 +8,27 @@
 @model Pharmacy_Manage.Models.User
 
 @{
-    var firstName = Model.FullName?.Split(' ')[0];
+    var firstName = Model.FullName?.Split(' ')[1];
 }
-
 <h5>Welcome @firstName</h5>
-
-<hr />
-
-<h4>Admin Information</h4>
+<hr />  
+<h4>Seasonal Medicine Demand</h4>
 
 <table class="table table-bordered">
 
     <tr>
-        <th>Full Name</th>
-        <td>@Model.FullName</td>
+        <th>Season</th>
+        <th>Top Medicine</th>
+        <th>Total Requests</th>
     </tr>
 
-    <tr>
-        <th>Email</th>
-        <td>
-            @Model.Email
-
-            <a asp-controller="Admin"
-                   asp-action="ChangeEmail"
-                   class="btn btn-sm btn-primary ms-2">
-                Change
-            </a>
-
-        </td>
-    </tr>
-
-    <tr>
-        <th>Role</th>
-        <td>@Model.Role</td>
-    </tr>
-
-    <tr>
-        <th>Status</th>
-        <td>@Model.Status</td>
-    </tr>
-
-    <tr>
-        <th>Created At</th>
-        <td>@Model.CreatedAt</td>
-    </tr>
+    @foreach (var item in ViewBag.SeasonalData)
+    {
+        <tr>
+            <td>@item.Season</td>
+            <td>@item.TopMedicine</td>
+            <td>@item.TotalRequests</td>
+        </tr>
+    }
 
 </table>

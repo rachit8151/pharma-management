@@ -1,4 +1,8 @@
-﻿@if (TempData["Error"] != null)
+﻿@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@if (TempData["Error"] != null)
 {
     <div class="alert alert-danger">
         @TempData["Error"]
@@ -12,129 +16,239 @@
     </div>
 }
 
-@{
-    Layout = "~/Views/Shared/_AdminLayout.cshtml";
-}
-
 @model List<Pharmacy_Manage.Models.MedicineRequest>
 
 <h2>Medicine Requests</h2>
 
 <table class="table table-bordered table-striped">
 
-    <tr>
-        <th>Pharmacist</th>
-        <th>Medicine</th>
-        <th>Quantity</th>
-        <th>Status</th>
-        <th>Action</th>
-    </tr>
-
-    @foreach (var item in Model)
-    {
+    <thead class="table-dark">
         <tr>
-
-            <td>@item.Pharmacist.User.FullName</td>
-
-            <td>@item.Medicine.MedicineName</td>
-
-            <td>@item.Quantity</td>
-
-            <td>
-                @if (item.Status == "pending")
-                {
-                    <span class="badge bg-warning text-dark">Pending</span>
-                }
-                else if (item.Status == "approved")
-                {
-                    <span class="badge bg-primary">Approved</span>
-                }
-                else if (item.Status == "delivered")
-                {
-                    <span class="badge bg-success">Delivered</span>
-                }
-                else
-                {
-                    <span class="badge bg-danger">Rejected</span>
-                }
-            </td>
-
-            <td>
-
-                @if (item.Status == "pending")
-                {
-                    <!-- Approve -->
-                    <button class="btn btn-success btn-sm"
-                            data-bs-toggle="collapse"
-                            data-bs-target="#approveForm_@item.RequestId">
-                        Approve
-                    </button>
-
-                    <div class="collapse mt-2" id="approveForm_@item.RequestId">
-                        <form asp-action="Approve" method="post">
-                            <input type="hidden" name="id" value="@item.RequestId" />
-                            <input type="date" name="expiryDate" class="form-control mb-1" required />
-                            <button class="btn btn-success btn-sm">Confirm Approve</button>
-                        </form>
-                    </div>
-
-                    <!-- Reject -->
-                    <button class="btn btn-danger btn-sm"
-                            data-bs-toggle="collapse"
-                            data-bs-target="#rejectForm_@item.RequestId">
-                        Reject
-                    </button>
-
-                    <div class="collapse mt-2" id="rejectForm_@item.RequestId">
-                        <form asp-action="RejectRequest" method="post">
-                            <input type="hidden" name="requestId" value="@item.RequestId" />
-                            <input type="text" name="reason"
-                                   class="form-control mb-1"
-                                   placeholder="Enter rejection reason"
-                                   required />
-                            <button class="btn btn-danger btn-sm">Confirm Reject</button>
-                        </form>
-                    </div>
-                }
-                else if (item.Status == "approved")
-                {
-                    <!-- Send OTP -->
-                    <a asp-action="SendDeliveryOtp"
-                           asp-route-id="@item.RequestId"
-                           class="btn btn-warning btn-sm">
-                        Send OTP
-                    </a>
-
-                    <!-- Deliver -->
-                    <button class="btn btn-dark btn-sm"
-                            data-bs-toggle="collapse"
-                            data-bs-target="#otpForm_@item.RequestId">
-                        Deliver
-                    </button>
-
-                    <div class="collapse mt-2" id="otpForm_@item.RequestId">
-                        <form asp-action="VerifyDelivery" method="post">
-                            <input type="hidden" name="id" value="@item.RequestId" />
-                            <input type="text" name="otp"
-                                   class="form-control mb-1"
-                                   placeholder="Enter OTP"
-                                   required />
-                            <button class="btn btn-dark btn-sm">Confirm Delivery</button>
-                        </form>
-                    </div>
-                }
-                else if (item.Status == "delivered")
-                {
-                    <span class="text-success fw-bold">Completed</span>
-                }
-                else
-                {
-                    <span class="text-danger">Rejected</span>
-                }
-
-            </td>
-
+            <th>Pharmacist</th>
+            <th>Medicine Details</th>
+            <th>Quantity</th>
+            <th>Request Date</th>
+            <th>Expiry Date</th>
+            <th>Status</th>
+            <th>Action</th>
         </tr>
-    }
+    </thead>
+
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+
+                <td>
+                    <strong>@item.Pharmacist.User.FullName</strong>
+                </td>
+
+                <td>
+                    <strong>@item.Medicine.MedicineName</strong><br />
+
+                    Category: @item.Medicine.Category <br />
+                    Manufacturer: @item.Medicine.Manufacturer <br />
+                    Dosage: @item.Medicine.Dosage <br />
+                    Age Group: @item.Medicine.AgeGroup <br />
+                    Usage: @item.Medicine.Usage <br />
+                    Prescription: @item.Medicine.PrescriptionType <br />
+                    Price: ₹@item.Medicine.UnitPrice <br />
+
+                    @if (!string.IsNullOrEmpty(item.Medicine.SideEffects))
+                    {
+                        <small class="text-danger">
+                            Side Effects: @item.Medicine.SideEffects
+                        </small>
+                    }
+                </td>
+
+                <td>
+                    @item.Quantity
+                </td>
+
+                <td>
+                    @item.RequestDate.ToString("dd MMM yyyy")
+                </td>
+
+                <td>
+                    @if (item.ExpiryDate != null)
+                    {
+                        <span class="text-success fw-bold">
+                            @item.ExpiryDate.Value.ToString("dd MMM yyyy")
+                        </span>
+                    }
+                    else
+                    {
+                        <small class="text-muted">
+                            Set during approval <br /> (minimum 6 months validity)
+                        </small>
+                    }
+                </td>
+
+                <!-- STATUS -->
+                <td>
+
+                    @if (item.Status == "pending")
+                    {
+                        <span class="badge bg-warning text-dark">Pending</span>
+                    }
+                    else if (item.Status == "approved")
+                    {
+                        <span class="badge bg-primary">Approved</span>
+                    }
+                    else if (item.Status == "dispatch")
+                    {
+                        <span class="badge bg-info text-dark">Dispatch</span>
+                    }
+                    else if (item.Status == "paid")
+                    {
+                        <span class="badge bg-secondary">Paid</span>
+                    }
+                    else if (item.Status == "delivered")
+                    {
+                        <span class="badge bg-success">Delivered</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">Rejected</span>
+                    }
+
+                </td>
+
+                <!-- ACTION -->
+                <td>
+
+                    @if (item.Status == "pending")
+                    {
+                        <!-- APPROVE -->
+
+                        <button class="btn btn-success btn-sm"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#approveForm_@item.RequestId">
+                            Approve
+                        </button>
+
+                        <div class="collapse mt-2"
+                             id="approveForm_@item.RequestId">
+
+                            <form asp-action="Approve" method="post">
+
+                                <input type="hidden"
+                                       name="id"
+                                       value="@item.RequestId" />
+
+                                <label class="small">
+                                    Expiry Date
+                                </label>
+
+                                <input type="date"
+                                       name="expiryDate"
+                                       class="form-control mb-2"
+                                       required />
+
+                                <button class="btn btn-success btn-sm">
+                                    Confirm Approve
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                        <!-- REJECT -->
+
+                        <button class="btn btn-danger btn-sm"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#rejectForm_@item.RequestId">
+                            Reject
+                        </button>
+
+                        <div class="collapse mt-2"
+                             id="rejectForm_@item.RequestId">
+
+                            <form asp-action="RejectRequest" method="post">
+
+                                <input type="hidden"
+                                       name="requestId"
+                                       value="@item.RequestId" />
+
+                                <input type="text"
+                                       name="reason"
+                                       class="form-control mb-2"
+                                       placeholder="Enter rejection reason"
+                                       required />
+
+                                <button class="btn btn-danger btn-sm">
+                                    Confirm Reject
+                                </button>
+
+                            </form>
+
+                        </div>
+                    }
+                    else if (item.Status == "approved")
+                    {
+                        <a asp-action="Dispatch"
+                               asp-route-id="@item.RequestId"
+                               class="btn btn-info btn-sm">
+                            Dispatch
+                        </a>
+                    }
+                    else if (item.Status == "dispatch")
+                    {
+                        <a asp-action="SendDeliveryOtp"
+                               asp-route-id="@item.RequestId"
+                               class="btn btn-warning btn-sm">
+                            Send OTP
+                        </a>
+
+                        <button class="btn btn-dark btn-sm"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#otpForm_@item.RequestId">
+                            Deliver
+                        </button>
+
+                        <div class="collapse mt-2"
+                             id="otpForm_@item.RequestId">
+
+                            <form asp-action="VerifyDelivery" method="post">
+
+                                <input type="hidden"
+                                       name="id"
+                                       value="@item.RequestId" />
+
+                                <input type="text"
+                                       name="otp"
+                                       class="form-control mb-2"
+                                       placeholder="Enter OTP"
+                                       required />
+
+                                <button class="btn btn-dark btn-sm">
+                                    Confirm Delivery
+                                </button>
+
+                            </form>
+
+                        </div>
+                    }
+                    else if (item.Status == "delivered")
+                    {
+                        <span class="text-success fw-bold">
+                            Completed
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="text-danger">
+                            Rejected
+                        </span>
+                    }
+
+                </td>
+
+            </tr>
+        }
+
+    </tbody>
 
 </table>

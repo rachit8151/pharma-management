@@ -6,6 +6,8 @@
 <h2>Daily Sales</h2>
 
 <div class="mb-3">
+    <input type="date" id="filterDate" class="form-control" style="max-width:200px;" />
+
     <a asp-action="DownloadSalesPivotCSV"
            asp-controller="Pharmacist"
            class="btn btn-success">
@@ -27,21 +29,27 @@
 else
 {
     <table class="table table-bordered">
-        <tr>
-            <th>Date</th>
-            <th>Medicine</th>
-            <th>Qty</th>
-            <th>Total</th>
-        </tr>
-
-        @foreach (var item in Model)
-        {
+        <thead>
             <tr>
-                <td>@item.SaleDate.ToShortDateString()</td>
-                <td>@item.Medicine?.MedicineName</td>
-                <td>@item.QuantitySold</td>
-                <td>₹ @item.TotalAmount</td>
+                <th>Date</th>
+                <th>Medicine</th>
+                <th>Qty</th>
+                <th>Total</th>
             </tr>
-        }
+        </thead>
+
+        <tbody id="salesTableBody">
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.SaleDate.ToShortDateString()</td>
+                    <td>@item.Medicine?.MedicineName</td>
+                    <td>@item.QuantitySold</td>
+                    <td>₹ @item.TotalAmount</td>
+                </tr>
+            }
+        </tbody>
     </table>
 }
+
+<script src="~/js/sales-filter.js"></script>

@@ -1,44 +1,112 @@
-﻿@{
+﻿@model Pharmacy_Manage.Models.Medicine
+
+@{
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-@model Pharmacy_Manage.Models.Medicine
-
 <h2>Edit Medicine</h2>
 
-<form method="post">
+<form asp-action="Edit" method="post">
+    <div asp-validation-summary="All" class="text-danger mb-3"></div>
 
     <input type="hidden" asp-for="MedicineId" />
 
     <div class="mb-3">
         <label>Medicine Name</label>
         <input asp-for="MedicineName" class="form-control" />
+        <span asp-validation-for="MedicineName" class="text-danger"></span>
     </div>
 
     <div class="mb-3">
         <label>Category</label>
-        <select asp-for="Category" class="form-control">
 
+        <select asp-for="Category" class="form-control">
             <option value="">Select Category</option>
 
             @foreach (var category in ViewBag.Categories)
             {
                 <option value="@category">@category</option>
             }
-
         </select>
+
+        <span asp-validation-for="Category" class="text-danger"></span>
     </div>
 
     <div class="mb-3">
         <label>Manufacturer</label>
         <input asp-for="Manufacturer" class="form-control" />
+        <span asp-validation-for="Manufacturer" class="text-danger"></span>
     </div>
 
     <div class="mb-3">
-        <label>Price</label>
+        <label>Unit Price</label>
         <input asp-for="UnitPrice" class="form-control" />
+        <span asp-validation-for="UnitPrice" class="text-danger"></span>
     </div>
 
-    <button class="btn btn-success">Update</button>
+    <div class="mb-3">
+        <label>Stock Quantity</label>
+        <input asp-for="StockQuantity" class="form-control" />
+        <span asp-validation-for="StockQuantity" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label>Dosage</label>
+        <input asp-for="Dosage" class="form-control" placeholder="500mg / 5ml" />
+        <span asp-validation-for="Dosage" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label>Age Group</label>
+
+        <select asp-for="AgeGroup" class="form-control">
+            <option value="">Select Age Group</option>
+            <option>Kids</option>
+            <option>Adult</option>
+            <option>Both</option>
+        </select>
+
+        <span asp-validation-for="AgeGroup" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label>Usage</label>
+        <input asp-for="Usage" class="form-control" placeholder="Fever, Cold, Pain" />
+        <span asp-validation-for="Usage" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label>Prescription Type</label>
+
+        <select asp-for="PrescriptionType" class="form-control">
+            <option value="">Select Type</option>
+            <option>OTC</option>
+            <option>Prescription</option>
+        </select>
+
+        <span asp-validation-for="PrescriptionType" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label>Units Per Pack</label>
+        <input asp-for="UnitsPerPack" class="form-control" />
+        <span asp-validation-for="UnitsPerPack" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label>Side Effects</label>
+        <textarea asp-for="SideEffects" class="form-control"></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label>Storage Condition</label>
+        <input asp-for="StorageCondition" class="form-control" placeholder="Cool & Dry Place" />
+    </div>
+
+    <button class="btn btn-success">Update Medicine</button>
 
 </form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

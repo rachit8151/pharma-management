@@ -16,7 +16,8 @@ public class Sale
 	public Medicine Medicine { get; set; }
 	public int MedicineId { get; set; }
 
-	[Required]
+	[Required(ErrorMessage = "Quantity is required")]
+	[Range(1, 100000, ErrorMessage = "Quantity must be greater than 0")]
 	public int QuantitySold { get; set; }
 
 	public DateTime SaleDate { get; set; } = DateTime.Now;

@@ -4,11 +4,59 @@
 
 <h2>Upload Medicines CSV</h2>
 
+<strong>Example CSV Table Format:</strong>
+
+<table class="table table-bordered table-sm mt-3 bg-white">
+    <thead class="table-dark">
+        <tr>
+            <th>MedicineName</th>
+            <th>Category</th>
+            <th>Manufacturer</th>
+            <th>UnitPrice</th>
+            <th>Dosage</th>
+            <th>AgeGroup</th>
+            <th>Usage</th>
+            <th>PrescriptionType</th>
+            <th>StorageCondition</th>
+            <th>SideEffects</th>
+            <th>UnitsPerPack</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Paracetamol</td>
+            <td>Tablet</td>
+            <td>Cipla</td>
+            <td>10</td>
+            <td>500mg</td>
+            <td>Adult</td>
+            <td>Fever</td>
+            <td>OTC</td>
+            <td>Cool & Dry Place</td>
+            <td>Nausea</td>
+            <td>10</td>
+        </tr>
+
+        <tr>
+            <td>Dolo 650</td>
+            <td>Tablet</td>
+            <td>Micro Labs</td>
+            <td>15</td>
+            <td>650mg</td>
+            <td>Adult</td>
+            <td>Cold</td>
+            <td>Prescription</td>
+            <td>Room Temperature</td>
+            <td>Dizziness</td>
+            <td>15</td>
+        </tr>
+    </tbody>
+</table>
 <form asp-action="UploadCsv" method="post" enctype="multipart/form-data">
 
     <div class="mb-3">
 
-        <label>Select CSV File</label>
+        <label class="form-label">Select CSV File</label>
 
         <input type="file"
                name="file"
@@ -18,8 +66,13 @@
 
     </div>
 
-    <button class="btn btn-primary">
-        Upload
+    <button type="submit" class="btn btn-primary">
+        Upload CSV
     </button>
 
+    <a asp-action="Index" class="btn btn-secondary">
+        Back
+    </a>
+
 </form>
+

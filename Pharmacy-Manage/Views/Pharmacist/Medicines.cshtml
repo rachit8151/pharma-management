@@ -6,61 +6,93 @@
 
 <h2>Available Medicines</h2>
 
-<table class="table table-bordered">
+<table class="table table-bordered table-striped">
 
-    <tr>
-        <th>Medicine Name</th>
-        <th>Category</th>
-        <th>Manufacturer</th>
-        <th>Price</th>
-        <th>Action</th>
-    </tr>
-
-    @foreach (var item in Model)
-    {
+    <thead class="table-dark">
         <tr>
-
-            <td>@item.MedicineName</td>
-
-            <td>@item.Category</td>
-
-            <td>@item.Manufacturer</td>
-
-            <td>@item.UnitPrice</td>
-
-            <td>
-
-                <button class="btn btn-primary btn-sm"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#requestForm_@item.MedicineId">
-                    Request
-                </button>
-
-                <div class="collapse mt-2" id="requestForm_@item.MedicineId">
-
-                    <form asp-action="RequestMedicine" method="post">
-
-                        <input type="hidden"
-                               name="medicineId"
-                               value="@item.MedicineId" />
-
-                        <input type="number"
-                               name="quantity"
-                               class="form-control mb-1"
-                               placeholder="Enter quantity"
-                               required />
-
-                        <button class="btn btn-success btn-sm">
-                            Submit Request
-                        </button>
-
-                    </form>
-
-                </div>
-
-            </td>
-
+            <th>Medicine</th>
+            <th>Category</th>
+            <th>Manufacturer</th>
+            <th>Price</th>
+            <th>Dosage</th>
+            <th>Age Group</th>
+            <th>Usage</th>
+            <th>Prescription</th>
+            <th>Pack</th>
+            <th>Storage</th>
+            <th>Action</th>
         </tr>
-    }
+    </thead>
+
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+
+                <td>
+                    <strong>@item.MedicineName</strong>
+                </td>
+
+                <td>@item.Category</td>
+
+                <td>@item.Manufacturer</td>
+
+                <td>₹ @item.UnitPrice</td>
+
+                <td>@item.Dosage</td>
+
+                <td>@item.AgeGroup</td>
+
+                <td>@item.Usage</td>
+
+                <td>@item.PrescriptionType</td>
+
+                <td>@item.UnitsPerPack</td>
+
+                <td>
+                    @(string.IsNullOrEmpty(item.StorageCondition)
+                        ? "-"
+                        : item.StorageCondition)
+                </td>
+
+                <td>
+
+                    <button class="btn btn-primary btn-sm"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#requestForm_@item.MedicineId">
+                        Request
+                    </button>
+
+                    <div class="collapse mt-2"
+                         id="requestForm_@item.MedicineId">
+
+                        <form asp-action="RequestMedicine" method="post">
+
+                            <input type="hidden"
+                                   name="medicineId"
+                                   value="@item.MedicineId" />
+
+                            <input type="number"
+                                   name="quantity"
+                                   class="form-control mb-2"
+                                   placeholder="Enter quantity"
+                                   min="1"
+                                   required />
+
+                            <button class="btn btn-success btn-sm">
+                                Submit
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </td>
+
+            </tr>
+        }
+
+    </tbody>
 
 </table>

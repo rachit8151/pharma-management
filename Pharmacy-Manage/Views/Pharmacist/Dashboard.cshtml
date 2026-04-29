@@ -11,63 +11,28 @@
     var firstName = Model.User.FullName?.Split(' ')[0];
 }
 
-<h2>Pharmacist Dashboard</h2>
-
 <h5>Welcome @firstName</h5>
 
 <hr />
 
-<h4>Pharmacy Information</h4>
+<script src="~/js/pharmacist-dashboard.js"></script>
+<script src="~/js/prediction.js"></script>
 
-<table class="table table-bordered">
+<h4>Smart Stock Suggestion</h4>
 
-    <tr>
-        <th>Pharmacist Name</th>
-        <td>@Model.User.FullName</td>
-    </tr>
-
-    <tr>
-        <th>Email</th>
-        <td>@Model.User.Email</td>
-    </tr>
-
-    <tr>
-        <th>Store Name</th>
-        <td>@Model.StoreName</td>
-    </tr>
-
-    <tr>
-        <th>Store Address</th>
-        <td>@Model.StoreAddress</td>
-    </tr>
-
-    <tr>
-        <th>License Number</th>
-        <td>@Model.LicenseNumber</td>
-    </tr>
-
-    <tr>
-        <th>License Expiry</th>
-        <td>@Model.LicenseExpiryDate</td>
-    </tr>
-
-    <tr>
-        <th>Status</th>
-        <td>@Model.VerificationStatus</td>
-    </tr>
-
+<table class="table table-bordered" id="stockTable">
+    <thead>
+        <tr>
+            <th>Medicine</th>
+            <th>Current Stock</th>
+            <th>Predicted Demand</th>
+            <th>Order Quantity</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
 </table>
 
-<hr />
+<button id="btnStock" class="btn btn-danger">Check Stock Suggestion</button>
 
-<h4>Daily Sales Chart</h4>
-
-<div class="row mb-3">
-    <div class="col-md-4">
-        <input type="date" id="chartDate" class="form-control" />
-    </div>
-</div>
-
-<canvas id="salesChart" height="100"></canvas>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="~/js/pharmacist-dashboard.js"></script>
+<script src="~/js/stock.js"></script>

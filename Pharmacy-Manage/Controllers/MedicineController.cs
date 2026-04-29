@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Pharmacy_Manage.Data;
 using Pharmacy_Manage.Models;
-using System.Linq;
 
 namespace Pharmacy_Manage.Controllers
 {
@@ -14,12 +13,14 @@ namespace Pharmacy_Manage.Controllers
 			_context = context;
 		}
 
+		// =========================
 		// VIEW MEDICINES
-		public IActionResult Index(string search, string category)
+		// =========================
+		public IActionResult Index(string search, string category, string ageGroup, string prescriptionType)
 		{
 			var medicines = _context.Medicines.AsQueryable();
 
-			// Search filter
+			// Search
 			if (!string.IsNullOrEmpty(search))
 			{
 				medicines = medicines.Where(m =>
@@ -27,87 +28,144 @@ namespace Pharmacy_Manage.Controllers
 					m.Manufacturer.Contains(search));
 			}
 
-			// Category filter
+			// Category Filter
 			if (!string.IsNullOrEmpty(category))
 			{
 				medicines = medicines.Where(m => m.Category == category);
 			}
 
+			// Age Group Filter
+			if (!string.IsNullOrEmpty(ageGroup))
+			{
+				medicines = medicines.Where(m => m.AgeGroup == ageGroup);
+			}
+
+			// Prescription Filter
+			if (!string.IsNullOrEmpty(prescriptionType))
+			{
+				medicines = medicines.Where(m => m.PrescriptionType == prescriptionType);
+			}
+
 			return View(medicines.ToList());
 		}
 
-		// ADD MEDICINE PAGE
+		// =========================
+		// CREATE PAGE
+		// =========================
 		public IActionResult Create()
 		{
-			ViewBag.Categories = new List<string>
-			{
-				"Tablet",
-				"Capsule",
-				"Syrup",
-				"Injection",
-				"Cream",
-				"Drops",
-				"Powder",
-			};
-
+			LoadCategories();
 			return View();
 		}
 
-		// ADD MEDICINE SAVE
+		// =========================
+		// CREATE SAVE
+		// =========================
 		[HttpPost]
+		[ValidateAntiForgeryToken]
 		public IActionResult Create(Medicine medicine)
 		{
+			LoadCategories();
+
+			if (!ModelState.IsValid)
+			{
+				return View(medicine);
+			}
+
 			var adminEmail = HttpContext.Session.GetString("UserEmail");
 
 			var admin = _context.Users
 				.FirstOrDefault(u => u.Email == adminEmail);
 
+			if (admin == null)
+			{
+				return RedirectToAction("Login", "Account");
+			}
+
+			// Duplicate Check
+			bool exists = _context.Medicines.Any(m =>
+				m.MedicineName.ToLower().Trim() == medicine.MedicineName.ToLower().Trim() &&
+				m.Manufacturer.ToLower().Trim() == medicine.Manufacturer.ToLower().Trim());
+
+			if (exists)
+			{
+				ModelState.AddModelError("", "Medicine already exists.");
+				return View(medicine);
+			}
+
 			medicine.CreatedBy = admin.UserId;
+			medicine.CreatedAt = DateTime.Now;
 
 			_context.Medicines.Add(medicine);
 			_context.SaveChanges();
 
+			TempData["Message"] = "Medicine added successfully.";
+
 			return RedirectToAction("Index");
 		}
 
-		// EDIT MEDICINE
+		// =========================
+		// EDIT PAGE
+		// =========================
 		public IActionResult Edit(int id)
 		{
 			var medicine = _context.Medicines.Find(id);
-			ViewBag.Categories = new List<string>
+
+			if (medicine == null)
 			{
-				"Tablet",
-				"Capsule",
-				"Syrup",
-				"Injection",
-				"Cream",
-				"Drops",
-				"Powder",
-			};
+				return NotFound();
+			}
+
+			LoadCategories();
 
 			return View(medicine);
 		}
 
+		// =========================
+		// EDIT SAVE
+		// =========================
 		[HttpPost]
+		[ValidateAntiForgeryToken]
 		public IActionResult Edit(Medicine medicine)
 		{
+			LoadCategories();
+
+			if (!ModelState.IsValid)
+			{
+				return View(medicine);
+			}
+
 			var existingMedicine = _context.Medicines
 				.FirstOrDefault(m => m.MedicineId == medicine.MedicineId);
 
-			if (existingMedicine != null)
+			if (existingMedicine == null)
 			{
-				existingMedicine.MedicineName = medicine.MedicineName;
-				existingMedicine.Category = medicine.Category;
-				existingMedicine.Manufacturer = medicine.Manufacturer;
-				existingMedicine.UnitPrice = medicine.UnitPrice;
-
-				_context.SaveChanges();
+				return NotFound();
 			}
+
+			existingMedicine.MedicineName = medicine.MedicineName;
+			existingMedicine.Category = medicine.Category;
+			existingMedicine.Manufacturer = medicine.Manufacturer;
+			existingMedicine.UnitPrice = medicine.UnitPrice;
+			existingMedicine.StockQuantity = medicine.StockQuantity;
+			existingMedicine.Dosage = medicine.Dosage;
+			existingMedicine.AgeGroup = medicine.AgeGroup;
+			existingMedicine.Usage = medicine.Usage;
+			existingMedicine.PrescriptionType = medicine.PrescriptionType;
+			existingMedicine.SideEffects = medicine.SideEffects;
+			existingMedicine.StorageCondition = medicine.StorageCondition;
+			existingMedicine.UnitsPerPack = medicine.UnitsPerPack;
+
+			_context.SaveChanges();
+
+			TempData["Message"] = "Medicine updated successfully.";
 
 			return RedirectToAction("Index");
 		}
 
-		// DELETE MEDICINE
+		// =========================
+		// DELETE
+		// =========================
 		public IActionResult Delete(int id)
 		{
 			var medicine = _context.Medicines.Find(id);
@@ -116,21 +174,31 @@ namespace Pharmacy_Manage.Controllers
 			{
 				_context.Medicines.Remove(medicine);
 				_context.SaveChanges();
+
+				TempData["Message"] = "Medicine deleted successfully.";
 			}
 
 			return RedirectToAction("Index");
 		}
 
+		// =========================
+		// CSV PAGE
+		// =========================
 		public IActionResult UploadCsv()
 		{
 			return View();
 		}
 
+		// =========================
+		// CSV UPLOAD
+		// =========================
 		[HttpPost]
 		public async Task<IActionResult> UploadCsv(IFormFile file)
 		{
 			if (file == null || file.Length == 0)
+			{
 				return RedirectToAction("Index");
+			}
 
 			int inserted = 0;
 			int skipped = 0;
@@ -141,7 +209,9 @@ namespace Pharmacy_Manage.Controllers
 				.FirstOrDefault(u => u.Email == adminEmail);
 
 			if (admin == null)
+			{
 				return RedirectToAction("Login", "Account");
+			}
 
 			using (var reader = new StreamReader(file.OpenReadStream()))
 			{
@@ -157,18 +227,29 @@ namespace Pharmacy_Manage.Controllers
 						continue;
 					}
 
-					if (string.IsNullOrWhiteSpace(line)) {
+					if (string.IsNullOrWhiteSpace(line))
+					{
 						continue;
 					}
-						
 
 					var values = line.Split(',');
+
+					if (values.Length < 11)
+					{
+						continue;
+					}
 
 					string medicineName = values[0].Trim();
 					string category = values[1].Trim();
 					string manufacturer = values[2].Trim();
-					decimal price = 0;
-					decimal.TryParse(values[3], out price);
+					decimal price = decimal.Parse(values[3].Trim());
+					string dosage = values[4].Trim();
+					string ageGroup = values[5].Trim();
+					string usage = values[6].Trim();
+					string prescriptionType = values[7].Trim();
+					string storageCondition = values[8].Trim();
+					string sideEffects = values[9].Trim();
+					int unitsPerPack = int.Parse(values[10].Trim());
 
 					bool exists = _context.Medicines.Any(m =>
 						m.MedicineName.ToLower().Trim() == medicineName.ToLower().Trim() &&
@@ -186,6 +267,14 @@ namespace Pharmacy_Manage.Controllers
 						Category = category,
 						Manufacturer = manufacturer,
 						UnitPrice = price,
+						StockQuantity = 0,
+						Dosage = dosage,
+						AgeGroup = ageGroup,
+						Usage = usage,
+						PrescriptionType = prescriptionType,
+						StorageCondition = storageCondition,
+						SideEffects = sideEffects,
+						UnitsPerPack = unitsPerPack,
 						CreatedBy = admin.UserId,
 						CreatedAt = DateTime.Now
 					};
@@ -200,6 +289,23 @@ namespace Pharmacy_Manage.Controllers
 			TempData["Message"] = $"{inserted} medicines inserted, {skipped} duplicates skipped.";
 
 			return RedirectToAction("Index");
+		}
+
+		// =========================
+		// CATEGORY HELPER
+		// =========================
+		private void LoadCategories()
+		{
+			ViewBag.Categories = new List<string>
+			{
+				"Tablet",
+				"Capsule",
+				"Syrup",
+				"Injection",
+				"Cream",
+				"Drops",
+				"Powder"
+			};
 		}
 	}
 }

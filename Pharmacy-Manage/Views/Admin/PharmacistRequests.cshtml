@@ -13,7 +13,8 @@
             <th>Name</th>
             <th>Email</th>
             <th>Store</th>
-            <th>License</th>
+            <th>License No</th>
+            <th>License Document</th>
             <th>Status</th>
             <th>Action</th>
         </tr>
@@ -29,6 +30,20 @@
                 <td>@item.User.Email</td>
                 <td>@item.StoreName</td>
                 <td>@item.LicenseNumber</td>
+                <td>
+                    @if (!string.IsNullOrEmpty(item.LicenseDocumentUrl))
+                    {
+                        <a href="~/uploads/@item.LicenseDocumentUrl"
+                               target="_blank"
+                               class="btn btn-info btn-sm">
+                            View License
+                        </a>
+                    }
+                    else
+                    {
+                        <span class="text-danger">No File</span>
+                    }
+                </td>
                 <td>@item.VerificationStatus</td>
 
                 <td>

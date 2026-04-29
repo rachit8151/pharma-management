@@ -70,6 +70,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cUGhhcm1hY2lzdFJlcXVlc3RzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/DotNetCore/Pharmacy-Manage/Pharmacy-Manage/Views/Admin/Profile.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cUHJvZmlsZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/DotNetCore/Pharmacy-Manage/Pharmacy-Manage/Views/Admin/VerifyEmailOtp.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cVmVyaWZ5RW1haWxPdHAuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
@@ -116,6 +120,14 @@ build_metadata.AdditionalFiles.CssScope =
 
 [D:/DotNetCore/Pharmacy-Manage/Pharmacy-Manage/Views/Pharmacist/MyStock.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGhhcm1hY2lzdFxNeVN0b2NrLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/DotNetCore/Pharmacy-Manage/Pharmacy-Manage/Views/Pharmacist/Profile.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGhhcm1hY2lzdFxQcm9maWxlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/DotNetCore/Pharmacy-Manage/Pharmacy-Manage/Views/Pharmacist/SalesAnalytics.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGhhcm1hY2lzdFxTYWxlc0FuYWx5dGljcy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/DotNetCore/Pharmacy-Manage/Pharmacy-Manage/Views/Sales/Create.cshtml]

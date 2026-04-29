@@ -1,50 +1,71 @@
-﻿@{
+﻿@model List<Pharmacy_Manage.Models.Medicine>
+
+@{
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
+
 @if (TempData["Message"] != null)
 {
     <div class="alert alert-info">
         @TempData["Message"]
     </div>
 }
-@model List<Pharmacy_Manage.Models.Medicine>
 
 <h2>Medicines</h2>
 
-<a asp-action="UploadCsv" class="btn btn-success mb-3">
-    Upload Medicines (CSV)
-</a>
+<div class="mb-3">
+    <a asp-action="Create" class="btn btn-primary">
+        Add Medicine
+    </a>
 
-<form method="get" class="mb-3">
+    <a asp-action="UploadCsv" class="btn btn-success">
+        Upload Medicines (CSV)
+    </a>
+</div>
+
+<form method="get" class="mb-4">
 
     <div class="row">
 
-        <div class="col-md-4">
-
+        <div class="col-md-3">
             <input type="text"
                    name="search"
                    class="form-control"
                    placeholder="Search medicine..."
                    value="@Context.Request.Query["search"]" />
-
         </div>
 
-        <div class="col-md-3">
-
+        <div class="col-md-2">
             <select name="category" class="form-control">
-
                 <option value="">All Categories</option>
                 <option value="Tablet">Tablet</option>
                 <option value="Capsule">Capsule</option>
                 <option value="Syrup">Syrup</option>
                 <option value="Injection">Injection</option>
-
+                <option value="Cream">Cream</option>
+                <option value="Drops">Drops</option>
+                <option value="Powder">Powder</option>
             </select>
+        </div>
 
+        <div class="col-md-2">
+            <select name="ageGroup" class="form-control">
+                <option value="">All Age Groups</option>
+                <option value="Kids">Kids</option>
+                <option value="Adult">Adult</option>
+                <option value="Both">Both</option>
+            </select>
+        </div>
+
+        <div class="col-md-2">
+            <select name="prescriptionType" class="form-control">
+                <option value="">All Types</option>
+                <option value="OTC">OTC</option>
+                <option value="Prescription">Prescription</option>
+            </select>
         </div>
 
         <div class="col-md-3">
-
             <button class="btn btn-primary">
                 Search
             </button>
@@ -52,57 +73,111 @@
             <a href="/Medicine/Index" class="btn btn-secondary">
                 Reset
             </a>
-
         </div>
 
     </div>
 
 </form>
 
-
 @if (!Model.Any())
 {
-    <p>No medicines found.</p>
+    <div class="alert alert-warning">
+        No medicines found.
+    </div>
 }
 else
 {
-    <table class="table table-bordered table-striped">
+    <table class="table table-bordered table-striped table-hover">
 
-        <tr>
-            <th>Medicine Name</th>
-            <th>Category</th>
-            <th>Manufacturer</th>
-            <th>Price</th>
-            <th>Actions</th>
-        </tr>
-
-        @foreach (var item in Model)
-        {
+        <thead class="table-dark">
             <tr>
-
-                <td>@item.MedicineName</td>
-                <td>@item.Category</td>
-                <td>@item.Manufacturer</td>
-                <td>@item.UnitPrice</td>
-
-                <td>
-
-                    <a asp-action="Edit"
-                           asp-route-id="@item.MedicineId"
-                           class="btn btn-sm btn-warning">
-                        Edit
-                    </a>
-
-                    <a asp-action="Delete"
-                           asp-route-id="@item.MedicineId"
-                           class="btn btn-sm btn-danger">
-                        Delete
-                    </a>
-
-                </td>
-
+                <th>Medicine</th>
+                <th>Category</th>
+                <th>Manufacturer</th>
+                <th>Dosage</th>
+                <th>Age Group</th>
+                <th>Usage</th>
+                <th>Stock</th>
+                <th>Unit Price</th>
+                <th>Prescription</th>
+                <th>Units/Pack</th>
+                <th>Actions</th>
             </tr>
-        }
+        </thead>
+
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+
+                    <td>@item.MedicineName</td>
+
+                    <td>@item.Category</td>
+
+                    <td>@item.Manufacturer</td>
+
+                    <td>@item.Dosage</td>
+
+                    <td>@item.AgeGroup</td>
+
+                    <td>@item.Usage</td>
+
+                    <td>
+                        @if (item.StockQuantity < 20)
+                        {
+                            <span class="badge bg-danger">
+                                @item.StockQuantity
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-success">
+                                @item.StockQuantity
+                            </span>
+                        }
+                    </td>
+
+                    <td>₹@item.UnitPrice</td>
+
+                    <td>
+                        @if (item.PrescriptionType == "Prescription")
+                        {
+                            <span class="badge bg-warning text-dark">
+                                Prescription
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-info">
+                                OTC
+                            </span>
+                        }
+                    </td>
+
+                    <td>@item.UnitsPerPack</td>
+
+                    <td>
+
+                        <a asp-action="Edit"
+                               asp-route-id="@item.MedicineId"
+                               class="btn btn-sm btn-warning">
+                            Edit
+                        </a>
+
+                        <a asp-action="Delete"
+                               asp-route-id="@item.MedicineId"
+                               class="btn btn-sm btn-danger"
+                               onclick="return confirm('Delete this medicine?')">
+                            Delete
+                        </a>
+
+                    </td>
+
+                </tr>
+            }
+
+        </tbody>
 
     </table>
 }

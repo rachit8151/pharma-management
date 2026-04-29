@@ -21,6 +21,25 @@ public class SalesController : Controller
 		return View(sales);
 	}
 
+	[HttpGet]
+	public JsonResult GetSalesByDate(string date)
+	{
+		DateTime selectedDate = DateTime.Parse(date);
+
+		var sales = _context.Sales
+			.Include(s => s.Medicine)
+			.Where(s => s.SaleDate.Date == selectedDate.Date)
+			.Select(s => new
+			{
+				date = s.SaleDate.ToString("dd-MM-yyyy"),
+				medicine = s.Medicine.MedicineName,
+				qty = s.QuantitySold,
+				total = s.TotalAmount
+			})
+			.ToList();
+
+		return Json(sales);
+	}
 	public IActionResult Create()
 	{
 		ViewBag.Medicines = new SelectList(_context.Medicines, "MedicineId", "MedicineName");
@@ -34,10 +53,30 @@ public class SalesController : Controller
 
 		return Json(medicine?.UnitPrice ?? 0);
 	}
+	public JsonResult GetMedicineStock(int id)
+	{
+		var email = HttpContext.Session.GetString("UserEmail");
+
+		var pharmacist = _context.Pharmacists
+			.Include(p => p.User)
+			.FirstOrDefault(p => p.User.Email == email);
+
+		if (pharmacist == null)
+			return Json(0);
+
+		var stock = _context.PharmacistMedicines
+			.FirstOrDefault(pm =>
+				pm.PharmacistId == pharmacist.PharmacistId &&
+				pm.MedicineId == id);
+
+		return Json(stock?.Quantity ?? 0);
+	}
 
 	[HttpPost]
 	public IActionResult Create(Sale sale)
 	{
+		ViewBag.Medicines = new SelectList(_context.Medicines, "MedicineId", "MedicineName", sale.MedicineId);
+
 		var email = HttpContext.Session.GetString("UserEmail");
 
 		if (string.IsNullOrEmpty(email))
@@ -56,7 +95,6 @@ public class SalesController : Controller
 		if (medicine == null)
 		{
 			ModelState.AddModelError("", "Medicine not found");
-			ViewBag.Medicines = new SelectList(_context.Medicines, "MedicineId", "MedicineName");
 			return View(sale);
 		}
 
@@ -67,21 +105,18 @@ public class SalesController : Controller
 
 		if (stock == null || stock.Quantity <= 0)
 		{
-			ModelState.AddModelError("", "❌ No stock available for this medicine");
-			ViewBag.Medicines = new SelectList(_context.Medicines, "MedicineId", "MedicineName");
+			ModelState.AddModelError("", "No stock available for this medicine");
 			return View(sale);
 		}
 
 		if (sale.QuantitySold > stock.Quantity)
 		{
 			ModelState.AddModelError("", $"Only {stock.Quantity} items available in stock");
-			ViewBag.Medicines = new SelectList(_context.Medicines, "MedicineId", "MedicineName");
 			return View(sale);
 		}
 
 		sale.UnitPrice = medicine.UnitPrice;
 		sale.TotalAmount = medicine.UnitPrice * sale.QuantitySold;
-
 		sale.PharmacistId = pharmacist.PharmacistId;
 		sale.SaleDate = DateTime.Now;
 
@@ -89,6 +124,8 @@ public class SalesController : Controller
 
 		_context.Sales.Add(sale);
 		_context.SaveChanges();
+
+		TempData["Message"] = "Sale Added Successfully";
 
 		return RedirectToAction("Index");
 	}

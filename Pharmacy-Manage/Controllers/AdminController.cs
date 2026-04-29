@@ -18,19 +18,63 @@ namespace Pharmacy_Manage.Controllers
 		}
 
 		// Admin Profile Dashboard
+		public IActionResult Profile()
+		{
+			var adminEmail = HttpContext.Session.GetString("UserEmail");
+
+			if (string.IsNullOrEmpty(adminEmail))
+			{
+				return RedirectToAction("Login", "Account");
+			}
+
+			var adminUser = _context.Users
+				.FirstOrDefault(u => u.Email == adminEmail);
+
+			return View(adminUser);
+		}
 		public IActionResult Dashboard()
 		{
 			var expiryService = HttpContext.RequestServices.GetService<ExpiryAlertService>();
 			expiryService.CheckExpiryAlerts();
 
 			var adminEmail = HttpContext.Session.GetString("UserEmail");
+
 			if (string.IsNullOrEmpty(adminEmail))
 			{
 				return RedirectToAction("Login", "Account");
 			}
+
 			var adminUser = _context.Users
 				.FirstOrDefault(u => u.Email == adminEmail);
 
+			var seasonalData = _context.MedicineRequests
+				.Include(r => r.Medicine)
+				.Where(r => r.Status != "rejected")
+				.ToList()
+				.GroupBy(r =>
+				{
+					int month = r.RequestDate.Month;
+
+					if (month >= 3 && month <= 6)
+						return "Summer";
+
+					if (month >= 7 && month <= 9)
+						return "Monsoon";
+
+					return "Winter";
+				})
+				.Select(g => new
+				{
+					Season = g.Key,
+					TopMedicine = g.GroupBy(x => x.Medicine.MedicineName)
+						.OrderByDescending(x => x.Count())
+						.Select(x => x.Key)
+						.FirstOrDefault(),
+
+					TotalRequests = g.Count()
+				})
+				.ToList();
+			ViewBag.SeasonalData = seasonalData;
 			return View(adminUser);
 		}
 
@@ -65,64 +109,46 @@ namespace Pharmacy_Manage.Controllers
 			if (request == null)
 				return RedirectToAction("MedicineRequests");
 
+			// Prevent duplicate approval
+			if (request.Status != "pending")
+			{
+				TempData["Error"] = "Request already processed.";
+				return RedirectToAction("MedicineRequests");
+			}
+
+			// Minimum 6 months validation
+			if (expiryDate < DateTime.Now.AddMonths(6))
+			{
+				TempData["Error"] = "Expiry date must be minimum 6 months from today.";
+				return RedirectToAction("MedicineRequests");
+			}
+
 			var medicine = request.Medicine;
 
-			if (medicine.StockQuantity >= request.Quantity)
-			{
-				//reduce admin stock after approve
-				medicine.StockQuantity -= request.Quantity;
-
-				request.Status = "approved";
-				request.ExpiryDate = expiryDate;
-
-				var email = request.Pharmacist.User.Email;
-				var name = request.Pharmacist.User.FullName;
-
-				_emailService.SendOtp(
-					email,
-					"Medicine Request Approved",
-					$"Hello {name},\n\nYour request for {medicine.MedicineName} ({request.Quantity}) has been approved by admin.\n\nThank you."
-				);
-
-
-				//var stock = _context.PharmacistMedicines
-				//	.FirstOrDefault(x =>
-				//		x.PharmacistId == request.PharmacistId &&
-				//		x.MedicineId == request.MedicineId);
-
-				//if (stock != null)
-				//{
-				//	stock.Quantity += request.Quantity;
-				//}
-				//else
-				//{
-				//	var newStock = new PharmacistMedicine
-				//	{
-				//		PharmacistId = request.PharmacistId,
-				//		MedicineId = request.MedicineId,
-				//		Quantity = request.Quantity
-				//	};
-
-				//	_context.PharmacistMedicines.Add(newStock);
-				//}
-
-				//var inventory = new Inventory
-				//{
-				//	PharmacistId = request.PharmacistId,
-				//	MedicineId = request.MedicineId,
-				//	BatchNumber = "B" + DateTime.Now.Ticks.ToString().Substring(10),
-				//	Quantity = request.Quantity,
-				//	ExpiryDate = expiryDate,
-				//	LastUpdated = DateTime.Now
-				//};
-
-				//_context.Inventories.Add(inventory);
-				_context.SaveChanges();
-			}
-			else
+			if (medicine.StockQuantity < request.Quantity)
 			{
 				TempData["Error"] = $"Stock low. Available stock: {medicine.StockQuantity}";
+				return RedirectToAction("MedicineRequests");
 			}
+
+			// Reduce stock ONLY ONCE
+			medicine.StockQuantity -= request.Quantity;
+
+			request.Status = "approved";
+			request.ExpiryDate = expiryDate;
+
+			var email = request.Pharmacist.User.Email;
+			var name = request.Pharmacist.User.FullName;
+
+			_emailService.SendOtp(
+				email,
+				"Medicine Request Approved",
+				$"Hello {name},\n\nYour request for {medicine.MedicineName} ({request.Quantity}) has been approved.\n\nThank you."
+			);
+
+			_context.SaveChanges();
+
+			TempData["Message"] = "Medicine approved successfully.";
 
 			return RedirectToAction("MedicineRequests");
 		}
@@ -131,6 +157,7 @@ namespace Pharmacy_Manage.Controllers
 		public IActionResult SendDeliveryOtp(int id)
 		{
 			var request = _context.MedicineRequests
+				.Include(r => r.Medicine)
 				.Include(r => r.Pharmacist)
 				.ThenInclude(p => p.User)
 				.FirstOrDefault(r => r.RequestId == id);
@@ -147,8 +174,25 @@ namespace Pharmacy_Manage.Controllers
 
 			_emailService.SendOtp(
 				email,
-				"Delivery OTP",
-				$"Hello {name},\n\nYour delivery OTP is: {otp}\n\nProvide this OTP to admin."
+				"Medicine Delivery OTP",
+				$@"
+				Hello {name},
+				Your medicine delivery is ready.
+
+				----------------------------------------
+				📅 Request Date : {request.RequestDate:dd-MM-yyyy}
+				💊 Medicine     : {request.Medicine.MedicineName}
+				📦 Quantity     : {request.Quantity}
+				🗓 Expiry Date  : {request.ExpiryDate:dd-MM-yyyy}
+				----------------------------------------
+
+				🔐 OTP: {otp}
+
+				⚠️ Please share this OTP with admin to receive delivery.
+
+				Thank you,
+				Pharmacy System
+				"
 			);
 
 			_context.SaveChanges();
@@ -389,15 +433,28 @@ namespace Pharmacy_Manage.Controllers
 			return View(medicine);
 		}
 		[HttpPost]
+		[HttpPost]
 		public IActionResult UpdateStock(int MedicineId, int StockQuantity)
 		{
 			var medicine = _context.Medicines.Find(MedicineId);
 
-			if (medicine != null)
+			if (medicine == null)
 			{
-				medicine.StockQuantity += StockQuantity;
-				_context.SaveChanges();
+				TempData["Error"] = "Medicine not found.";
+				return RedirectToAction("ManageStock");
 			}
+
+			if (StockQuantity <= 0)
+			{
+				TempData["Error"] = "Stock quantity must be greater than 0.";
+				return RedirectToAction("ManageStock");
+			}
+
+			medicine.StockQuantity += StockQuantity;
+
+			_context.SaveChanges();
+
+			TempData["Message"] = "Stock updated successfully.";
 
 			return RedirectToAction("ManageStock");
 		}
@@ -406,6 +463,23 @@ namespace Pharmacy_Manage.Controllers
 			var medicines = _context.Medicines.ToList();
 
 			return View(medicines);
+		}
+
+		public IActionResult Dispatch(int id)
+		{
+			var request = _context.MedicineRequests
+				.FirstOrDefault(r => r.RequestId == id);
+
+			if (request != null)
+			{
+				request.Status = "dispatch";
+
+				_context.SaveChanges();
+
+				TempData["Message"] = "Medicine dispatched successfully.";
+			}
+
+			return RedirectToAction("MedicineRequests");
 		}
 
 	}

@@ -1,20 +1,31 @@
 ﻿@{
     Layout = "~/Views/Shared/_PharmacistLayout.cshtml";
 }
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Message"]
+    </div>
+}
 
 <h2>Add Daily Sale</h2>
 
 <form method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
 
     <div class="mb-3">
         <label>Medicine</label>
+
         <select id="medicineDropdown" name="MedicineId" class="form-control">
             <option value="">-- Select Medicine --</option>
+
             @foreach (var item in ViewBag.Medicines)
             {
                 <option value="@item.Value">@item.Text</option>
             }
         </select>
+
+        <div id="stockMessage" class="mt-2"></div>
     </div>
 
     <div class="mb-3">
@@ -24,7 +35,12 @@
 
     <div class="mb-3">
         <label>Quantity</label>
-        <input type="number" id="quantity" name="QuantitySold" class="form-control" required />
+        <input type="number"
+               id="quantity"
+               name="QuantitySold"
+               class="form-control"
+               min="1"
+               required />
     </div>
 
     <div class="mb-3">

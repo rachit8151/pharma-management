@@ -40,6 +40,14 @@
 						<a class="nav-link"
 							   asp-controller="Admin"
 							   asp-action="Dashboard">
+							Dashboard
+						</a>
+					</li>
+
+					<li class="nav-item">
+						<a class="nav-link"
+							   asp-controller="Admin"
+							   asp-action="Profile">
 							Profile
 						</a>
 					</li>
@@ -132,6 +140,7 @@
 
 	<!-- Bootstrap JS -->
 	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+	@RenderSection("Scripts", required: false)
 	
 </body>
 </html>

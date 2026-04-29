@@ -135,7 +135,7 @@ namespace Pharmacy_Manage.Controllers
 			content.Add(new StreamContent(fileStream), "file", fileName);
 
 			var response = await client.PostAsync("http://127.0.0.1:8000/scan-license/", content);
-
+			//var response = await client.PostAsync("http://13.233.32.215:8000/scan-license/", content);
 			string verificationStatus = "pending";
 
 			if (response.IsSuccessStatusCode)

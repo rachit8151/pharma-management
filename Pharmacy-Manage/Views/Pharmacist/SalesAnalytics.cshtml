@@ -1,0 +1,47 @@
+﻿@{
+    Layout = "~/Views/Shared/_PharmacistLayout.cshtml";
+}
+
+<h4>Daily Sales Chart</h4>
+
+<div class="row mb-3">
+    <div class="col-md-4">
+        <input type="date" id="chartDate" class="form-control" />
+    </div>
+</div>
+
+<div class="mb-3">
+    <button id="btnPredict" class="btn btn-warning">
+        Predict Next 7 Days
+    </button>
+</div>
+
+<canvas id="predictionChart"></canvas>
+
+<canvas id="salesChart" height="100"></canvas>
+
+<hr />
+
+<h4>Smart Stock Suggestion</h4>
+
+<table class="table table-bordered" id="stockTable">
+    <thead>
+        <tr>
+            <th>Medicine</th>
+            <th>Current Stock</th>
+            <th>Predicted Demand</th>
+            <th>Order Quantity</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<button id="btnStock" class="btn btn-danger">
+    Check Stock Suggestion
+</button>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="~/js/pharmacist-dashboard.js"></script>
+<script src="~/js/prediction.js"></script>
+<script src="~/js/stock.js"></script>
